@@ -1,0 +1,9 @@
+**/*.hex
+**/*.elf
+**/*.o
+**/*~
+**/target
+**/.iml
+**/output/main.c
+**/output/fsm.h
+**/step5/lustre-v4-*
