@@ -7,7 +7,6 @@ import java.util.List;
 public class CompositeActuator extends Actuator {
 
     private List<Actuator> actuators;
-    private String name;
 
     public List<Actuator> getActuators() {
         return actuators;
@@ -22,17 +21,6 @@ public class CompositeActuator extends Actuator {
         for (Actuator actuator : actuators) {
             visitor.visit(actuator);
         }
-    }
-
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
     }
 
 

@@ -30,4 +30,12 @@ public class Value implements NamedElement, Visitable {
     public String getName() {
         return name;
     }
+
+    public String toC() {
+        return Integer.toString(value);
+    }
+
+    public int getDepth() {
+        return 0;
+    }
 }

@@ -5,6 +5,7 @@ import io.github.mosser.arduinoml.ens.generator.Visitor;
 import io.github.mosser.arduinoml.ens.model.*;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -15,14 +16,14 @@ public class SevenSeg {
     public static void main(String[] args) {
 
         SIGNAL[][] NUMBERS = {
-                {SIGNAL.LOW,  SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH},
-                {SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW },
-                {SIGNAL.HIGH, SIGNAL.LOW,  SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW,  SIGNAL.HIGH, SIGNAL.HIGH},
-                {SIGNAL.HIGH, SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH},
-                {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW },
-                {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW,  SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW,  SIGNAL.HIGH},
-                {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW,  SIGNAL.HIGH},
-                {SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH},
+                {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW },
+                {SIGNAL.LOW , SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW , SIGNAL.LOW , SIGNAL.LOW , SIGNAL.LOW },
+                {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW , SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW , SIGNAL.HIGH},
+                {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW , SIGNAL.LOW , SIGNAL.HIGH},
+                {SIGNAL.LOW , SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW , SIGNAL.LOW , SIGNAL.HIGH, SIGNAL.HIGH},
+                {SIGNAL.HIGH, SIGNAL.LOW , SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW , SIGNAL.HIGH, SIGNAL.HIGH},
+                {SIGNAL.HIGH, SIGNAL.LOW , SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH},
+                {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW , SIGNAL.LOW , SIGNAL.LOW , SIGNAL.LOW },
                 {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH},
                 {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW,  SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH},
                 {SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW }
@@ -31,6 +32,22 @@ public class SevenSeg {
         Value count = new Value();
         count.setName("count");
         count.setValue(0);
+
+        ArrayValue numbersArray = new ArrayValue();
+        numbersArray.setName("NUMBERS");
+        List<ArrayValue> numbers = new ArrayList<>();
+        for (SIGNAL[] number : NUMBERS) {
+            List<Value> segments = new ArrayList<>();
+            for(SIGNAL segment : number) {
+                Value value = new Value();
+                value.setValue(segment.ordinal());
+                segments.add(value);
+            }
+            ArrayValue numberArray = new ArrayValue();
+            numberArray.setValues(segments);
+            numbers.add(numberArray);
+        }
+        numbersArray.setValues(numbers);
 
         Actuator seven_seg_prop1 = new Actuator();
         seven_seg_prop1.setName("7SEG_PROP1");
@@ -82,6 +99,7 @@ public class SevenSeg {
         // Building the App
         App theSwitch = new App();
         theSwitch.setName("7SEG!");
+        theSwitch.setVariables(Arrays.asList(count, numbersArray));
         theSwitch.setBricks(Arrays.asList(seven_seg, seven_seg_prop1, seven_seg_prop2));
         theSwitch.setStates(Arrays.asList(initialise, counting));
         theSwitch.setInitial(initialise);

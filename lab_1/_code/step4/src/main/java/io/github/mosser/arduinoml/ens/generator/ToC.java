@@ -28,7 +28,13 @@ public class ToC extends Visitor<StringBuffer> {
 		c("#include <Arduino.h>");
 		c("#include <fsm.h>");
 		c("");
+
+		for (Value v : app.getVariables()) {
+			v.accept(this);
+		}
+
 		c("void setup(){");
+
 		for(Actuator a: app.getActuators()){
 			a.accept(this);
 		}
@@ -50,7 +56,14 @@ public class ToC extends Visitor<StringBuffer> {
 
 	@Override
 	public void visit(Value value) {
-		c(String.format("int %s = %d", value.getName(), value.getValue()));
+		c(String.format("int %s = %d;", value.getName(), value.getValue()));
+	}
+
+	@Override
+	public void visit(ArrayValue value) {
+		String declaration = String.format("int%s %s = ", value.getName(),
+				new String(new char[value.getDepth()]).replace("\0", "[11]"));
+		c(String.format("%s %s;", declaration, value.toC()));
 	}
 
 	@Override
