@@ -25,7 +25,6 @@ enum SIGNAL {
 NamedElement <|-- App
 NamedElement <|-- Actuator
 NamedElement <|-- State
-
 App *--> "1..*\nstates" State
 App *--> "1..*\nactuators" Actuator
 State --> "next" State

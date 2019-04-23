@@ -49,10 +49,14 @@ public class ToC extends Visitor<StringBuffer> {
 	}
 
 	@Override
-	public void visit(Actuator actuator) {
-	 	c(String.format("  pinMode(%d, OUTPUT); // %s [Actuator]", actuator.getPin(), actuator.getName()));
+	public void visit(Value value) {
+		c(String.format("int %s = %d", value.getName(), value.getValue()));
 	}
 
+	@Override
+	public void visit(Actuator actuator) {
+		c(String.format("  pinMode(%d, OUTPUT); // %s [Actuator]", actuator.getPin(), actuator.getName()));
+	}
 
 	@Override
 	public void visit(State state) {
