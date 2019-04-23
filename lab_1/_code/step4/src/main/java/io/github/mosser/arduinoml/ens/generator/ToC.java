@@ -32,6 +32,8 @@ public class ToC extends Visitor<StringBuffer> {
 		for(Actuator a: app.getActuators()){
 			a.accept(this);
 		}
+		// this is where we implement our sensors?
+        
 		c("}\n");
 
 		for(State state: app.getStates()){
@@ -77,7 +79,7 @@ public class ToC extends Visitor<StringBuffer> {
 	// Our sensor code
 	@Override
 	public void visit(Sensor sensor) {
-		c(String.format("  digitalWrite(%d,%s);",sensor.getState().getName()));
+        c(String.format("  pinMode(%d, INPUT); // %s [Sensor]", sensor.getPin(), sensor.getName()));
 	}
 
 }
