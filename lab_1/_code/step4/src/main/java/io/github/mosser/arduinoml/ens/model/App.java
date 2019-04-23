@@ -8,7 +8,7 @@ import java.util.List;
 public class App implements NamedElement, Visitable {
 
 	private String name;
-	private List<Value> variables = new ArrayList<>();
+	private List<Variable> variables = new ArrayList<>();
 	private List<Actuator> actuators = new ArrayList<Actuator>();
 	private List<State> states = new ArrayList<State>();
 	private State initial;
@@ -23,11 +23,11 @@ public class App implements NamedElement, Visitable {
 		this.name = name;
 	}
 
-	public List<Value> getVariables() {
+	public List<Variable> getVariables() {
 		return variables;
 	}
 
-	public void setVariables(List<Value> variables) {
+	public void setVariables(List<Variable> variables) {
 		this.variables = variables;
 	}
 

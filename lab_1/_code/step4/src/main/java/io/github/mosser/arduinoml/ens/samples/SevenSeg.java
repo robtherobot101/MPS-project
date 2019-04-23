@@ -5,7 +5,6 @@ import io.github.mosser.arduinoml.ens.generator.Visitor;
 import io.github.mosser.arduinoml.ens.model.*;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -29,25 +28,9 @@ public class SevenSeg {
                 {SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW }
         };
 
-        Value count = new Value();
+        Variable count = new Variable();
         count.setName("count");
         count.setValue(0);
-
-        ArrayValue numbersArray = new ArrayValue();
-        numbersArray.setName("NUMBERS");
-        List<ArrayValue> numbers = new ArrayList<>();
-        for (SIGNAL[] number : NUMBERS) {
-            List<Value> segments = new ArrayList<>();
-            for(SIGNAL segment : number) {
-                Value value = new Value();
-                value.setValue(segment.ordinal());
-                segments.add(value);
-            }
-            ArrayValue numberArray = new ArrayValue();
-            numberArray.setValues(segments);
-            numbers.add(numberArray);
-        }
-        numbersArray.setValues(numbers);
 
         Actuator seven_seg_prop1 = new Actuator();
         seven_seg_prop1.setName("7SEG_PROP1");
@@ -84,13 +67,35 @@ public class SevenSeg {
         set_prop2.setActuator(seven_seg_prop2);
         set_prop2.setValue(SIGNAL.HIGH);
 
-        CompositeAction increment = new CompositeAction();
-        increment.setActuator(seven_seg);
-        increment.setValues(NUMBERS[0]);
+        // Seven Seg Actions
+        CompositeAction zero = new CompositeAction();
+        zero.setValues(NUMBERS[0]);
+        CompositeAction one = new CompositeAction();
+        one.setValues(NUMBERS[1]);
+        CompositeAction two = new CompositeAction();
+        two.setValues(NUMBERS[2]);
+        CompositeAction three = new CompositeAction();
+        three.setValues(NUMBERS[3]);
+        CompositeAction four = new CompositeAction();
+        four.setValues(NUMBERS[4]);
+        CompositeAction five = new CompositeAction();
+        five.setValues(NUMBERS[5]);
+        CompositeAction six = new CompositeAction();
+        six.setValues(NUMBERS[6]);
+        CompositeAction seven = new CompositeAction();
+        seven.setValues(NUMBERS[7]);
+        CompositeAction eight = new CompositeAction();
+        eight.setValues(NUMBERS[8]);
+        CompositeAction nine = new CompositeAction();
+        nine.setValues(NUMBERS[9]);
+        CompositeAction[] sevenSegActions = {zero, one, two, three, four, five, six, seven, eight, nine};
+        ConditionalAction sevenSegAction = new ConditionalAction();
+        sevenSegAction.setVariable(count);
+        sevenSegAction.setActions(sevenSegActions);
 
         // Binding actions to states
         initialise.setActions(Arrays.asList(set_prop1, set_prop2));
-        counting.setActions(Arrays.asList(increment));
+        counting.setActions(Arrays.asList(sevenSegActions));
 
         // Binding transitions to states
         initialise.setNext(counting);
@@ -99,7 +104,7 @@ public class SevenSeg {
         // Building the App
         App theSwitch = new App();
         theSwitch.setName("7SEG!");
-        theSwitch.setVariables(Arrays.asList(count, numbersArray));
+        theSwitch.setVariables(Arrays.asList(count));
         theSwitch.setBricks(Arrays.asList(seven_seg, seven_seg_prop1, seven_seg_prop2));
         theSwitch.setStates(Arrays.asList(initialise, counting));
         theSwitch.setInitial(initialise);

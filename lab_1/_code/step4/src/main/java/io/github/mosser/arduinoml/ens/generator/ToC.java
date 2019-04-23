@@ -29,7 +29,7 @@ public class ToC extends Visitor<StringBuffer> {
 		c("#include <fsm.h>");
 		c("");
 
-		for (Value v : app.getVariables()) {
+		for (Variable v : app.getVariables()) {
 			v.accept(this);
 		}
 
@@ -55,15 +55,8 @@ public class ToC extends Visitor<StringBuffer> {
 	}
 
 	@Override
-	public void visit(Value value) {
-		c(String.format("int %s = %d;", value.getName(), value.getValue()));
-	}
-
-	@Override
-	public void visit(ArrayValue value) {
-		String declaration = String.format("int%s %s = ", value.getName(),
-				new String(new char[value.getDepth()]).replace("\0", "[11]"));
-		c(String.format("%s %s;", declaration, value.toC()));
+	public void visit(Variable variable) {
+		c(String.format("int %s = %d;", variable.getName(), variable.getValue()));
 	}
 
 	@Override
@@ -86,6 +79,15 @@ public class ToC extends Visitor<StringBuffer> {
 	@Override
 	public void visit(Action action) {
 		c(String.format("  digitalWrite(%d,%s);",action.getActuator().getPin(),action.getValue()));
+	}
+
+	@Override
+	public void visit(ConditionalAction action) {
+		for (CompositeAction compositeAction : action.getActions()) {
+			for (Action singleAction : compositeAction..getActuators()) {
+				visit(sing);
+			}
+		}
 	}
 
 	@Override
