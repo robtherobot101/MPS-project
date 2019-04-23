@@ -60,7 +60,9 @@ public class ToC extends Visitor<StringBuffer> {
 		for(Action action: state.getActions()) {
 			action.accept(this);
 		}
+		// this delay is an action itself
 		c("  _delay_ms(1000);");
+		// I think this is where we rewrite the code to include events
 		c(String.format("  state_%s();", state.getNext().getName()));
 		c("}");
 	}
@@ -68,9 +70,11 @@ public class ToC extends Visitor<StringBuffer> {
 
 	@Override
 	public void visit(Action action) {
+	    // Command for action
 		c(String.format("  digitalWrite(%d,%s);",action.getActuator().getPin(),action.getValue()));
 	}
 
+	// Our sensor code
 	@Override
 	public void visit(Sensor sensor) {
 		c(String.format("  digitalWrite(%d,%s);",sensor.getState().getName()));

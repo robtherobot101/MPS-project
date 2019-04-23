@@ -38,6 +38,7 @@ public class Led {
 		off.setActions(Arrays.asList(switchTheLightOff));
 
 		// Binding transitions to states
+		// Does that mean that state.next() is calling a transition? - A transition needs a source, target, and event
 		on.setNext(off);
 		off.setNext(on);
 
