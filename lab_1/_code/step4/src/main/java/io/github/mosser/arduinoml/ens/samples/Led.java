@@ -72,7 +72,7 @@ public class Led {
 
 		Actuator led = new Actuator();
 		led.setName("LED");
-		led.setPin(13);
+		led.setPin(12);
 		led.setMode(MODE.OUTPUT);
 
 

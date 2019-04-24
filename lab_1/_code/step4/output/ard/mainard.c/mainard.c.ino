@@ -1,4 +1,18 @@
+//EVENTS
+enum events { null_event, button_pressed, button_released, count_overflow };
 
+
+void (*led_state_machine)(int event); //LED state machine
+void led_state_off(int event);
+void led_state_on(int event);
+
+//void sevenseg_state_machine(event_type event);
+//void sevenseg_state_increment(event_type event);
+//void sevenseg_state_reset(event_type event);
+
+void (*button_state_machine)(int event); // Button state machine
+void button_state_up(int event);
+void button_state_down(int event);
 
 
 #include <avr/io.h>

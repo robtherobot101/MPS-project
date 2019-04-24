@@ -13,12 +13,12 @@ public class NewLed {
     public static void main(String[] args) {
 
         // Name of the state machine
-        String stateMachineName = "Led!";
+        String stateMachineName = "led";
 
 
         Actuator led = new Actuator();
         led.setName("LED");
-        led.setPin(13);
+        led.setPin(12);
         led.setMode(MODE.OUTPUT);
 
 
@@ -28,15 +28,15 @@ public class NewLed {
         turnOn.setName(stateMachineName);
 
         Transition turnOff = new Transition();
-        turnOn.setEvent(EVENT.NULL_EVENT);
-        turnOn.setName(stateMachineName);
+        turnOff.setEvent(EVENT.NULL_EVENT);
+        turnOff.setName(stateMachineName);
 
-        // Declaring states
+        // Declaring states - Note we must prefix the name of the state with the name of the app (state machine)
         State on = new State();
-        on.setName("on");
+        on.setName(String.format("%s_state_on", stateMachineName));
 
         State off = new State();
-        off.setName("off");
+        off.setName(String.format("%s_state_off", stateMachineName));
 
 
 
