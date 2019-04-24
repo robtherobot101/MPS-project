@@ -19,6 +19,10 @@ public class State implements NamedElement, Visitable {
     @Override public void setName(String name) {
         this.name = name;
     }
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
 
     public List<Action> getActions() {
         return actions;

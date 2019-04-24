@@ -4,6 +4,7 @@ import io.github.mosser.arduinoml.ens.model.*;
 
 public class ToC extends Visitor<StringBuffer> {
 
+    // What is this for? I thought remembering states is against the rules of the game...
 	private final static String CURRENT_STATE = "current_state";
 
 	public ToC() {
@@ -32,7 +33,12 @@ public class ToC extends Visitor<StringBuffer> {
 		for(Actuator a: app.getActuators()){
 			a.accept(this);
 		}
-		// this is where we implement our sensors?
+
+        if (app.getInitial() != null) {
+
+            //TODO: Change this to iterate through the app's statemachines
+            c(String.format("  %s_state_machine = &_state_%s;", app.getName(), app.getName(), app.getInitial().getName()));
+        }
         
 		c("}\n");
 
@@ -44,7 +50,10 @@ public class ToC extends Visitor<StringBuffer> {
 		if (app.getInitial() != null) {
 			c("int main(void) {");
 			c("  setup();");
-			c(String.format("  state_%s();", app.getInitial().getName()));
+            c("  while(1) {");
+            //TODO: Change this to iterate through the app's statemachines
+            c(String.format("    %s_state_machine(null_event);", app.getName()));
+            c("  }");
 			c("  return 0;");
 			c("}");
 		}
@@ -52,20 +61,26 @@ public class ToC extends Visitor<StringBuffer> {
 
 	@Override
 	public void visit(Actuator actuator) {
-	 	c(String.format("  pinMode(%d, OUTPUT); // %s [Actuator]", actuator.getPin(), actuator.getName()));
+
+	 	c(String.format("  pinMode(%d, %s); // %s [Actuator]", actuator.getPin(), accutator.getMode(), actuator.getName()));
 	}
 
 
 	@Override
 	public void visit(State state) {
-		c(String.format("void state_%s() {",state.getName()));
+		h(String.format("void state_%s(int event) {",state.getName()));
 		for(Action action: state.getActions()) {
 			action.accept(this);
 		}
 		// this delay is an action itself
 		c("  _delay_ms(1000);");
 		// I think this is where we rewrite the code to include events
-		c(String.format("  state_%s();", state.getNext().getName()));
+
+        //TODO: Modify for multiple transitions using else if block
+        for(Transition transition:state.getTransitions()) {
+            transition.accept(this);
+        }
+		//c(String.format("  state_%s();", state.getNext().getName()));
 		c("}");
 	}
 
@@ -81,5 +96,14 @@ public class ToC extends Visitor<StringBuffer> {
 	public void visit(Sensor sensor) {
         c(String.format("  pinMode(%d, INPUT); // %s [Sensor]", sensor.getPin(), sensor.getName()));
 	}
+
+	// Our transition code
+	@Override
+	public void visit(Transition transition) {
+        c(String.format("  if(event == %s) {", transition.getEvent()));
+        c(String.format("    %s_state_machine = &%s;", transition.getName(), transition.getTarget().getName()));
+        c(String.format("  }", transition.getEvent()));
+    }
+
 
 }

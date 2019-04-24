@@ -8,6 +8,14 @@ public class Actuator implements NamedElement, Visitable {
 
     private int pin;
     private String name;
+    private MODE mode;
+
+
+    public MODE getMode() {
+        return mode;
+    }
+
+    public void setMode(MODE mode) { this.mode = mode; }
 
     public int getPin() {
         return pin;

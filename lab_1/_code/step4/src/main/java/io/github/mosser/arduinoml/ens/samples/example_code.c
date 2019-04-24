@@ -39,7 +39,7 @@ void setup() {
 
 }
 
-void do_event(int event)
+void do_event(int event) // I think we need to refactor this out
 {
   led_state_machine(event);
   button_state_machine(event);
