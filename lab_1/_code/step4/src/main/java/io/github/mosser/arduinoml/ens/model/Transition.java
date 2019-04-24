@@ -6,7 +6,7 @@ import io.github.mosser.arduinoml.ens.generator.Visitor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class State implements NamedElement, Visitable {
+public class Transition implements NamedElement, Visitable {
 
     private String name; // might not need this
     private EVENT event;
@@ -24,12 +24,6 @@ public class State implements NamedElement, Visitable {
         visitor.visit(this);
     }
 
-    public List<Action> getActions() {
-        return actions;
-    }
-    public void setActions(List<Action> actions) {
-        this.actions = actions;
-    }
 
     public EVENT getEvent() { return event; }
 

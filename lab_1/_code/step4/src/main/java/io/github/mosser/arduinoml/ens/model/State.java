@@ -29,7 +29,7 @@ public class State implements NamedElement, Visitable {
 
     public List<Transition> getTransitions() { return transitions; }
 
-    public void setTransitionss(List<Transition> transitions) { this.transitions = transitions; }
+    public void setTransitions(List<Transition> transitions) { this.transitions = transitions; }
 
     @Override
 	public void accept(Visitor visitor) {

@@ -4,7 +4,7 @@ import io.github.mosser.arduinoml.ens.generator.Visitable;
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
 
-public class Sensor implements NamedElement, Visitable {
+public class Sensor implements Visitable {
 //    private String name;
 //    private int pin;
 //

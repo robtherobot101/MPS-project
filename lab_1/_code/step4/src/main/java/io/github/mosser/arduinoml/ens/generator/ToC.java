@@ -34,16 +34,22 @@ public class ToC extends Visitor<StringBuffer> {
 			a.accept(this);
 		}
 
+		// TODO: This shouldn't be hardcoded, must abstract this somehow
+		h("enum events { NULL_EVENT, BUTTON_PRESSED, BUTTON_RELEASED, COUNT_OVERFLOW };");
+
         if (app.getInitial() != null) {
 
             //TODO: Change this to iterate through the app's statemachines
-            c(String.format("  %s_state_machine = &_state_%s;", app.getName(), app.getName(), app.getInitial().getName()));
+            c(String.format("  %s_state_machine = &%s;", app.getName(), app.getInitial().getName()));
+
+            // add initial state as state machine to header file
+            h(String.format("void (*%s_state_machine)(int event);", app.getName()));
         }
         
 		c("}\n");
 
 		for(State state: app.getStates()){
-			h(String.format("void state_%s();", state.getName()));
+			h(String.format("void state_%s(int event);", state.getName()));
 			state.accept(this);
 		}
 
@@ -52,7 +58,7 @@ public class ToC extends Visitor<StringBuffer> {
 			c("  setup();");
             c("  while(1) {");
             //TODO: Change this to iterate through the app's statemachines
-            c(String.format("    %s_state_machine(null_event);", app.getName()));
+            c(String.format("    %s_state_machine(NULL_EVENT);", app.getName()));
             c("  }");
 			c("  return 0;");
 			c("}");
@@ -62,13 +68,14 @@ public class ToC extends Visitor<StringBuffer> {
 	@Override
 	public void visit(Actuator actuator) {
 
-	 	c(String.format("  pinMode(%d, %s); // %s [Actuator]", actuator.getPin(), accutator.getMode(), actuator.getName()));
+	 	c(String.format("  pinMode(%d, %s); // %s [Actuator]", actuator.getPin(), actuator.getMode(), actuator.getName()));
 	}
 
 
 	@Override
 	public void visit(State state) {
-		h(String.format("void state_%s(int event) {",state.getName()));
+	    // Note the name of the sate must be prefixed with the name of the statemachine (the app) e.g. 'led_state_on'
+		c(String.format("void %s(int event) {",state.getName()));
 		for(Action action: state.getActions()) {
 			action.accept(this);
 		}
@@ -94,7 +101,7 @@ public class ToC extends Visitor<StringBuffer> {
 	// Our sensor code
 	@Override
 	public void visit(Sensor sensor) {
-        c(String.format("  pinMode(%d, INPUT); // %s [Sensor]", sensor.getPin(), sensor.getName()));
+        //c(String.format("  pinMode(%d, INPUT); // %s [Sensor]", sensor.getPin(), sensor.getName()));
 	}
 
 	// Our transition code
@@ -102,7 +109,7 @@ public class ToC extends Visitor<StringBuffer> {
 	public void visit(Transition transition) {
         c(String.format("  if(event == %s) {", transition.getEvent()));
         c(String.format("    %s_state_machine = &%s;", transition.getName(), transition.getTarget().getName()));
-        c(String.format("  }", transition.getEvent()));
+        c("  }");
     }
 
 

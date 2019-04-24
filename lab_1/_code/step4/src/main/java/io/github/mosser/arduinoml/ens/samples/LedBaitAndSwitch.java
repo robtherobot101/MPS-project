@@ -38,8 +38,8 @@ public class LedBaitAndSwitch {
         off.setActions(Arrays.asList(switchTheLightOff));
 
         // Binding transitions to states
-        on.setNext(off);
-        off.setNext(on);
+//        on.setNext(off);
+//        off.setNext(on);
 
         // Building the App
         App theSwitch = new App();
