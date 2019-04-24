@@ -70,7 +70,7 @@ void button_state_up(int event)
   if (event == button_pressed){
     button_state_machine = &button_state_down;
   }
-  else if (!digitalRead(button)) {
+  else if (!digitalRead(button)) { // button is pushed
     do_event(button_pressed);
   }
 }
@@ -80,7 +80,7 @@ void button_state_down(int event)
   if (event == button_released){
     button_state_machine = &button_state_up;
   }
-  else if (digitalRead(button)) {
+  else if (digitalRead(button)) { // button is released
     do_event(button_released);
   }
 }
