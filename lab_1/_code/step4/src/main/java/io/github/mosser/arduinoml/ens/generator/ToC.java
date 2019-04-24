@@ -46,7 +46,7 @@ public class ToC extends Visitor<StringBuffer> {
 		}
 
 		if (app.getInitial() != null) {
-			c("int main(void) {");
+			c("void loop(void) {");
 			c("  setup();");
 			c(String.format("  state_%s();", app.getInitial().getName()));
 			c("  return 0;");
@@ -56,7 +56,7 @@ public class ToC extends Visitor<StringBuffer> {
 
 	@Override
 	public void visit(Variable variable) {
-		c(String.format("int %s = %d;", variable.getName(), variable.getValue()));
+		c(String.format("%s %s = %s;", variable.getType(), variable.getName(), variable.getInitialValue()));
 	}
 
 	@Override
@@ -89,6 +89,14 @@ public class ToC extends Visitor<StringBuffer> {
 			visit(conditionalAction.getActions()[i]);
 			c("break;");
 		}
+		c("}");
+	}
+
+	@Override
+	public void visit(DelayedAction delayedAction) {
+		c(String.format("if (millis() - %s > %dUL) {", delayedAction.getTimer().getName(), delayedAction.getDelay()));
+		c(String.format("%s = millis();", delayedAction.getTimer().getName()));
+		visit(delayedAction.getAction());
 		c("}");
 	}
 

@@ -29,8 +29,14 @@ public class SevenSeg {
         };
 
         Variable count = new Variable();
+        count.setType("int");
         count.setName("count");
-        count.setValue(0);
+        count.setInitialValue("0");
+
+        Variable sevenSegLastUpdated = new Variable();
+        sevenSegLastUpdated.setType("unsigned long");
+        sevenSegLastUpdated.setName("seven_seg_last_updated");
+        sevenSegLastUpdated.setInitialValue("0");
 
         Actuator seven_seg_prop1 = new Actuator();
         seven_seg_prop1.setName("7SEG_PROP1");
@@ -75,6 +81,12 @@ public class SevenSeg {
             }
         }
 
+        // Temp to test delay
+        DelayedAction resetTimerAction = new DelayedAction();
+        resetTimerAction.setDelay(1000);
+        resetTimerAction.setTimer(sevenSegLastUpdated);
+        resetTimerAction.setAction(sevenSegActions[0][0]);
+
         ConditionalAction[] conditionalActions = new ConditionalAction[7];
         for (int i = 0; i < conditionalActions.length; i++) {
             ConditionalAction conditionalAction = new ConditionalAction();
@@ -85,7 +97,9 @@ public class SevenSeg {
 
         // Binding actions to states
         initialise.setActions(Arrays.asList(set_prop1, set_prop2));
-        counting.setActions(Arrays.asList(conditionalActions));
+        List<Action> things = new ArrayList<>(Arrays.asList(conditionalActions));
+        things.add(resetTimerAction);
+        counting.setActions(things);
 
         // Binding transitions to states
         initialise.setNext(counting);
@@ -94,7 +108,7 @@ public class SevenSeg {
         // Building the App
         App theSwitch = new App();
         theSwitch.setName("7SEG!");
-        theSwitch.setVariables(Arrays.asList(count));
+        theSwitch.setVariables(Arrays.asList(count, sevenSegLastUpdated));
         List<Actuator> allActuators = new ArrayList<>(Arrays.asList(sevenSegActuators));
         allActuators.add(seven_seg_prop1);
         allActuators.add(seven_seg_prop2);

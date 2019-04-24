@@ -6,14 +6,15 @@ import io.github.mosser.arduinoml.ens.generator.Visitor;
 public class Variable implements NamedElement, Visitable {
 
     private String name;
-    private int value;
+    private String initialValue;
+    private String type;
 
-    public int getValue() {
-        return value;
+    public String getInitialValue() {
+        return initialValue;
     }
 
-    public void setValue(int value) {
-        this.value = value;
+    public void setInitialValue(String initialValue) {
+        this.initialValue = initialValue;
     }
 
     @Override
@@ -29,5 +30,13 @@ public class Variable implements NamedElement, Visitable {
     @Override
     public String getName() {
         return name;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
     }
 }
