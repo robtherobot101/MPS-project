@@ -1,15 +1,12 @@
 package io.github.mosser.arduinoml.ens.model;
 
-import com.sun.tools.javac.util.Pair;
-import io.github.mosser.arduinoml.ens.generator.Visitable;
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
-import java.util.List;
 
-public class ConditionalAction implements Visitable {
+public class ConditionalAction extends Action {
 
     private Variable variable;
-    private CompositeAction[] actions;
+    private Action[] actions;
 
 	@Override
 	public void accept(Visitor visitor) {
@@ -24,11 +21,11 @@ public class ConditionalAction implements Visitable {
         this.variable = value;
     }
 
-    public void setActions(CompositeAction[] actions) {
+    public void setActions(Action[] actions) {
         this.actions = actions;
     }
 
-    public CompositeAction[] getActions() {
+    public Action[] getActions() {
         return actions;
     }
 }

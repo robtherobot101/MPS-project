@@ -82,12 +82,14 @@ public class ToC extends Visitor<StringBuffer> {
 	}
 
 	@Override
-	public void visit(ConditionalAction action) {
-		for (CompositeAction compositeAction : action.getActions()) {
-			for (Action singleAction : compositeAction..getActuators()) {
-				visit(sing);
-			}
+	public void visit(ConditionalAction conditionalAction) {
+		c(String.format("switch(%s) { \n", conditionalAction.getVariable().getName()));
+		for (int i = 0; i < conditionalAction.getActions().length; i++) {
+			c(String.format("case %d: ", i));
+			visit(conditionalAction.getActions()[i]);
+			c("break;");
 		}
+		c("}");
 	}
 
 	@Override

@@ -25,7 +25,7 @@ public class SevenSeg {
                 {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW , SIGNAL.LOW , SIGNAL.LOW , SIGNAL.LOW },
                 {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH},
                 {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW,  SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH},
-                {SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW }
+                //{SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW }
         };
 
         Variable count = new Variable();
@@ -40,16 +40,13 @@ public class SevenSeg {
         seven_seg_prop2.setName("7SEG_PROP2");
         seven_seg_prop2.setPin(9);
 
-        CompositeActuator seven_seg = new CompositeActuator();
-        seven_seg.setName("7SEG");
-        List<Actuator> actuators = new ArrayList<>();
-        for (int i = 1; i < 8; i++) {
+        Actuator[] sevenSegActuators = new Actuator[7];
+        for (int i = 0; i < 7; i++) {
             Actuator actuator = new Actuator();
-            actuator.setName(String.format("Segment, %d", i));
-            actuator.setPin(i);
-            actuators.add(actuator);
+            actuator.setPin(i + 1);
+            actuator.setName("pin " + (i + 1));
+            sevenSegActuators[i] = actuator;
         }
-        seven_seg.setActuators(actuators);
 
         // Declaring states
         State initialise = new State();
@@ -68,34 +65,27 @@ public class SevenSeg {
         set_prop2.setValue(SIGNAL.HIGH);
 
         // Seven Seg Actions
-        CompositeAction zero = new CompositeAction();
-        zero.setValues(NUMBERS[0]);
-        CompositeAction one = new CompositeAction();
-        one.setValues(NUMBERS[1]);
-        CompositeAction two = new CompositeAction();
-        two.setValues(NUMBERS[2]);
-        CompositeAction three = new CompositeAction();
-        three.setValues(NUMBERS[3]);
-        CompositeAction four = new CompositeAction();
-        four.setValues(NUMBERS[4]);
-        CompositeAction five = new CompositeAction();
-        five.setValues(NUMBERS[5]);
-        CompositeAction six = new CompositeAction();
-        six.setValues(NUMBERS[6]);
-        CompositeAction seven = new CompositeAction();
-        seven.setValues(NUMBERS[7]);
-        CompositeAction eight = new CompositeAction();
-        eight.setValues(NUMBERS[8]);
-        CompositeAction nine = new CompositeAction();
-        nine.setValues(NUMBERS[9]);
-        CompositeAction[] sevenSegActions = {zero, one, two, three, four, five, six, seven, eight, nine};
-        ConditionalAction sevenSegAction = new ConditionalAction();
-        sevenSegAction.setVariable(count);
-        sevenSegAction.setActions(sevenSegActions);
+        Action[][] sevenSegActions = new Action[7][10];
+        for (int i = 0; i < NUMBERS.length; i++) {
+            for (int j = 0; j < 7; j++) {
+                Action action = new Action();
+                action.setActuator(sevenSegActuators[j]);
+                action.setValue(NUMBERS[i][j]);
+                sevenSegActions[j][i] = action;
+            }
+        }
+
+        ConditionalAction[] conditionalActions = new ConditionalAction[7];
+        for (int i = 0; i < conditionalActions.length; i++) {
+            ConditionalAction conditionalAction = new ConditionalAction();
+            conditionalAction.setVariable(count);
+            conditionalAction.setActions(sevenSegActions[i]);
+            conditionalActions[i] = conditionalAction;
+        }
 
         // Binding actions to states
         initialise.setActions(Arrays.asList(set_prop1, set_prop2));
-        counting.setActions(Arrays.asList(sevenSegActions));
+        counting.setActions(Arrays.asList(conditionalActions));
 
         // Binding transitions to states
         initialise.setNext(counting);
@@ -105,7 +95,10 @@ public class SevenSeg {
         App theSwitch = new App();
         theSwitch.setName("7SEG!");
         theSwitch.setVariables(Arrays.asList(count));
-        theSwitch.setBricks(Arrays.asList(seven_seg, seven_seg_prop1, seven_seg_prop2));
+        List<Actuator> allActuators = new ArrayList<>(Arrays.asList(sevenSegActuators));
+        allActuators.add(seven_seg_prop1);
+        allActuators.add(seven_seg_prop2);
+        theSwitch.setBricks(allActuators);
         theSwitch.setStates(Arrays.asList(initialise, counting));
         theSwitch.setInitial(initialise);
 
