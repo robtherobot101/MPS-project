@@ -9,7 +9,7 @@ import java.util.List;
 public class Transition implements NamedElement, Visitable {
 
     private String name; // might not need this
-    private EVENT event;
+    private Event event;
     private Sensor trigger;
     private State target;
 
@@ -25,9 +25,9 @@ public class Transition implements NamedElement, Visitable {
     }
 
 
-    public EVENT getEvent() { return event; }
+    public Event getEvent() { return event; }
 
-    public void setEvent(EVENT event) { this.event = event; }
+    public void setEvent(Event event) { this.event = event; }
 
     public State getTarget() { return target; }
 

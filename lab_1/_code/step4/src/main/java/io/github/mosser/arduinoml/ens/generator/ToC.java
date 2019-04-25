@@ -2,6 +2,9 @@ package io.github.mosser.arduinoml.ens.generator;
 
 import io.github.mosser.arduinoml.ens.model.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ToC extends Visitor<StringBuffer> {
 
     // What is this for? I thought remembering states is against the rules of the game...
@@ -43,26 +46,26 @@ public class ToC extends Visitor<StringBuffer> {
 			a.accept(this);
 		}
 
-		// TODO: This probably shouldn't be hardcoded, must abstract this somehow
-		h("enum events { NULL_EVENT, BUTTON_PRESSED, BUTTON_RELEASED, COUNT_OVERFLOW };");
+		StringBuilder eventsEnum = new StringBuilder("enum events {");
+		for (Event event : app.getEvents()) {
+			eventsEnum.append(event.getName()).append(", ");
+		}
+		eventsEnum.append("};");
+		h(eventsEnum.toString());
 
 
 
         if (!app.getInitialStates().isEmpty()) {
 
             // App is a Non-Deterministic Finite State Machine with multiple initial states ( think one initial state with lambda transitions )
-            for (State state: app.getInitialStates()) {
-                //c(String.format("  %s_state_machine = &%s;", app.getName(), state.getName()));
-                //c(String.format("  %s_state_machine = &%s;", state.getName(), state.getName()));
-
-                // add initial states as state machines to header file
-                //h(String.format("void (*%s_state_machine)(int event);", app.getName()));
-                h(String.format("void (*%s_state_machine)(int event);", state.getName()));
+            for (String machine: app.getMachines()) {
+                h(String.format("void (*%s_state_machine)(int event);", machine));
             }
 
             //TODO: Remove hard coded state machines once I figure out how to name them properly
-            c(String.format("  led_state_machine = &led_state_on;"));
-            c(String.format("  button_state_machine = &button_state_up;"));
+            //c(String.format("  led_state_machine = &led_state_on;"));
+            //c(String.format("  button_state_machine = &button_state_up;"));
+            c(String.format("  sevenseg_state_machine = &sevenseg_state_initialising;"));
 
         }
 
@@ -78,22 +81,18 @@ public class ToC extends Visitor<StringBuffer> {
             //c(String.format("    %s_state_machine(NULL_EVENT);", state.getName()));
         }
         //TODO: Remove hard coded state machines once I figure out how to name them properly
-        c(String.format("  led_state_machine(event);"));
-        c(String.format("  button_state_machine(event);"));
+        //c(String.format("  led_state_machine(event);"));
+        //c(String.format("  button_state_machine(event);"));
+        c(String.format("  sevenseg_state_machine(event);"));
         c("}\n");
 
 		for(State state: app.getStates()){
-			h(String.format("void state_%s(int event);", state.getName()));
 			state.accept(this);
 		}
 
         if (!app.getInitialStates().isEmpty()) {
 			c("void loop(void) {");
-			c("  setup();");
-            c("  while(1) {");
-            c("    do_event(NULL_EVENT);");
-
-            c("  }");
+            c(String.format("  do_event(%s);", app.getNull_event().getName()));
 			c("}");
 		}
 	}
@@ -110,7 +109,8 @@ public class ToC extends Visitor<StringBuffer> {
 
 	@Override
 	public void visit(State state) {
-	    // Note the name of the sate must be prefixed with the name of the statemachine (the app) e.g. 'led_state_on'
+		h(String.format("void %s(int event);", state.getName()));
+		// Note the name of the sate must be prefixed with the name of the statemachine (the app) e.g. 'led_state_on'
 		c(String.format("void %s(int event) {",state.getName()));
 		for(Action action: state.getActions()) {
 			action.accept(this);
@@ -137,11 +137,11 @@ public class ToC extends Visitor<StringBuffer> {
 
 	@Override
 	public void visit(ConditionalAction conditionalAction) {
-		c(String.format("switch(%s) { \n", conditionalAction.getVariable().getName()));
+		c(String.format("  switch(%s) { \n", conditionalAction.getVariable().getName()));
 		for (int i = 0; i < conditionalAction.getActions().length; i++) {
-			c(String.format("case %d: ", i));
+			c(String.format("    case %d: ", i));
 			visit(conditionalAction.getActions()[i]);
-			c("break;");
+			c("    break;");
 		}
 		c("}");
 	}
@@ -159,11 +159,11 @@ public class ToC extends Visitor<StringBuffer> {
 	public void visit(Sensor sensor) {
 	    if (sensor.getValue() == SIGNAL.HIGH) {
             c(String.format("  else if (!digitalRead(%s)) {",sensor.getActuator().getName()));
-            c("    do_event(BUTTON_PRESSED);");
+            c("    do_event(BUTTON_PRESSED_EVENT);");
             c("  }");
         } else {
             c(String.format("  else if (digitalRead(%s)) {",sensor.getActuator().getName()));
-            c("    do_event(BUTTON_RELEASED);");
+            c("    do_event(BUTTON_RELEASED_EVENT);");
             c("  }");
         }
 
@@ -172,7 +172,7 @@ public class ToC extends Visitor<StringBuffer> {
 	// Our transition code
 	@Override
 	public void visit(Transition transition) {
-        c(String.format("  if(event == %s) {", transition.getEvent()));
+        c(String.format("  if(event == %s) {", transition.getEvent().getName()));
         c(String.format("    %s_state_machine = &%s;", transition.getName(), transition.getTarget().getName()));
         c("  }");
 	    if (transition.getTrigger() != null) {

@@ -9,9 +9,12 @@ public class App implements NamedElement, Visitable {
 
 	private String name;
 	private List<Variable> variables = new ArrayList<>();
-	private List<Actuator> actuators = new ArrayList<Actuator>();
-	private List<State> states = new ArrayList<State>();
+	private List<Actuator> actuators = new ArrayList<>();
+	private List<String> machines = new ArrayList<>();
+	private List<State> states = new ArrayList<>();
 	private List<State> initialStates = new ArrayList<>();
+	private List<Event> events = new ArrayList<>();
+	private Event null_event;
 	private State initial;
 
 	@Override
@@ -63,5 +66,29 @@ public class App implements NamedElement, Visitable {
 	@Override
 	public void accept(Visitor visitor) {
 		visitor.visit(this);
+	}
+
+    public Event getNull_event() {
+        return null_event;
+    }
+
+    public void setNull_event(Event null_event) {
+        this.null_event = null_event;
+    }
+
+	public List<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<Event> events) {
+		this.events = events;
+	}
+
+	public List<String> getMachines() {
+		return machines;
+	}
+
+	public void setMachines(List<String> machines) {
+		this.machines = machines;
 	}
 }

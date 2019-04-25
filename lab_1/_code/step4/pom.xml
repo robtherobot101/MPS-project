@@ -34,7 +34,7 @@
                     <goals><goal>java</goal></goals>
                 </execution></executions>
                 <configuration>
-                    <mainClass>io.github.mosser.arduinoml.ens.samples.SevenSeg</mainClass>
+                    <mainClass>io.github.mosser.arduinoml.ens.samples.TheTrinity</mainClass>
                 </configuration>
             </plugin>
         </plugins>

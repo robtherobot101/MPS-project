@@ -24,9 +24,13 @@ public class SevenSeg {
                 {SIGNAL.HIGH, SIGNAL.LOW , SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH},
                 {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW , SIGNAL.LOW , SIGNAL.LOW , SIGNAL.LOW },
                 {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH},
-                {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.LOW,  SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH},
+                {SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH, SIGNAL.HIGH,  SIGNAL.LOW, SIGNAL.HIGH, SIGNAL.HIGH},
                 //{SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW,  SIGNAL.LOW }
         };
+
+        String sevenSegStateMachineName = "sevenseg";
+        // String buttonStateMachineName = "button";
+
 
         Variable count = new Variable();
         count.setType("int");
@@ -39,27 +43,48 @@ public class SevenSeg {
         sevenSegLastUpdated.setInitialValue("0");
 
         Actuator seven_seg_prop1 = new Actuator();
-        seven_seg_prop1.setName("7SEG_PROP1");
+        seven_seg_prop1.setMode(MODE.OUTPUT);
+        seven_seg_prop1.setName("SEVENSEG_PROP1");
         seven_seg_prop1.setPin(8);
 
         Actuator seven_seg_prop2 = new Actuator();
-        seven_seg_prop2.setName("7SEG_PROP2");
+        seven_seg_prop2.setMode(MODE.OUTPUT);
+        seven_seg_prop2.setName("SEVENSEG_PROP2");
         seven_seg_prop2.setPin(9);
 
         Actuator[] sevenSegActuators = new Actuator[7];
         for (int i = 0; i < 7; i++) {
             Actuator actuator = new Actuator();
             actuator.setPin(i + 1);
-            actuator.setName("pin " + (i + 1));
+            actuator.setName("pin_" + (i + 1));
+            actuator.setMode(MODE.OUTPUT);
             sevenSegActuators[i] = actuator;
         }
 
         // Declaring states
         State initialise = new State();
-        initialise.setName("Initialising");
+        initialise.setName(String.format("%s_state_initialising", sevenSegStateMachineName));
 
         State counting = new State();
-        counting.setName("Counting");
+        counting.setName(String.format("%s_state_counting", sevenSegStateMachineName));
+
+        // Events
+        Event null_event = new Event();
+        null_event.setName("null");
+        Event buttonPressed = new Event();
+        buttonPressed.setName("button_pressed");
+        Event buttonReleased = new Event();
+        buttonReleased.setName("button_released");
+        Event sevenSegOverflow = new Event();
+        sevenSegOverflow.setName("sevenseg_overflow");
+
+        // Transitions
+        Transition initialiseFinished = new Transition();
+        initialiseFinished.setName(sevenSegStateMachineName);
+        initialiseFinished.setEvent(null_event);
+        initialiseFinished.setTarget(counting);
+
+        initialise.setTransitions(Arrays.asList(initialiseFinished));
 
         // Creating actions
         Action set_prop1 = new Action();
@@ -101,20 +126,16 @@ public class SevenSeg {
         things.add(resetTimerAction);
         counting.setActions(things);
 
-        // Binding transitions to states
-        initialise.setNext(counting);
-        counting.setNext(counting);
-
         // Building the App
         App theSwitch = new App();
-        theSwitch.setName("7SEG!");
+        theSwitch.setName("sevenseg");
         theSwitch.setVariables(Arrays.asList(count, sevenSegLastUpdated));
         List<Actuator> allActuators = new ArrayList<>(Arrays.asList(sevenSegActuators));
         allActuators.add(seven_seg_prop1);
         allActuators.add(seven_seg_prop2);
         theSwitch.setBricks(allActuators);
         theSwitch.setStates(Arrays.asList(initialise, counting));
-        theSwitch.setInitial(initialise);
+        theSwitch.setInitialStates(Arrays.asList(initialise));
 
         // Generating Code
         Visitor codeGenerator = new ToC();
