@@ -7,7 +7,7 @@ public class Variable<T> implements NamedElement, Visitable {
 
     private String name;
     private String initialValue;
-    private String type;
+    private TYPE type;
 
     public String getInitialValue() {
         return initialValue;
@@ -32,11 +32,11 @@ public class Variable<T> implements NamedElement, Visitable {
         return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public TYPE getType() {
+        return type;
     }
 
-    public String getType() {
-        return type;
+    public void setType(TYPE type) {
+        this.type = type;
     }
 }

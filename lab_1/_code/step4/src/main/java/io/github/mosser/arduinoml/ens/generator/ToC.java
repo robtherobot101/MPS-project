@@ -2,8 +2,6 @@ package io.github.mosser.arduinoml.ens.generator;
 
 import io.github.mosser.arduinoml.ens.model.*;
 
-import java.util.HashSet;
-import java.util.Set;
 
 public class ToC extends Visitor<StringBuffer> {
 
@@ -33,10 +31,6 @@ public class ToC extends Visitor<StringBuffer> {
 		c("#include <fsm.h>");
 		c("");
 
-		for (Variable v : app.getVariables()) {
-			v.accept(this);
-		}
-
         for(Actuator a: app.getActuators()){
             c(String.format("int %s = %d;", a.getName(), a.getPin()));
         }
@@ -63,8 +57,8 @@ public class ToC extends Visitor<StringBuffer> {
             }
 
             //TODO: Remove hard coded state machines once I figure out how to name them properly
-            //c(String.format("  led_state_machine = &led_state_on;"));
-            //c(String.format("  button_state_machine = &button_state_up;"));
+            c(String.format("  led_state_machine = &led_state_on;"));
+            c(String.format("  button_state_machine = &button_state_up;"));
             c(String.format("  sevenseg_state_machine = &sevenseg_state_initialising;"));
 
         }
@@ -76,13 +70,9 @@ public class ToC extends Visitor<StringBuffer> {
 
         c("void do_event(int event)");
         c("{");
-        for (State state: app.getInitialStates()) {
-            // c(String.format("    %s_state_machine(NULL_EVENT);", app.getName()));
-            //c(String.format("    %s_state_machine(NULL_EVENT);", state.getName()));
-        }
         //TODO: Remove hard coded state machines once I figure out how to name them properly
-        //c(String.format("  led_state_machine(event);"));
-        //c(String.format("  button_state_machine(event);"));
+        c(String.format("  led_state_machine(event);"));
+        c(String.format("  button_state_machine(event);"));
         c(String.format("  sevenseg_state_machine(event);"));
         c("}\n");
 
@@ -112,6 +102,22 @@ public class ToC extends Visitor<StringBuffer> {
 		h(String.format("void %s(int event);", state.getName()));
 		// Note the name of the sate must be prefixed with the name of the statemachine (the app) e.g. 'led_state_on'
 		c(String.format("void %s(int event) {",state.getName()));
+
+		for (Variable variable : state.getVariables()) {
+			String typeString = "int";
+			switch(variable.getType()) {
+				case LONG:
+					typeString = "unsigned long";
+					break;
+				case INTEGER:
+					typeString = "int";
+					break;
+				case STRING:
+					typeString = "char*[]";
+			}
+			c(String.format("  static %s %s = %s;", typeString, variable.getName(), variable.getInitialValue()));
+		}
+
 		for(Action action: state.getActions()) {
 			action.accept(this);
 		}
@@ -121,9 +127,9 @@ public class ToC extends Visitor<StringBuffer> {
 
         // failing if statement so transactions can be stacked
         //c("  if (1 == 2) {}");
-        for(Transition transition:state.getTransitions()) {
-            transition.accept(this);
-        }
+		for(Transition transition:state.getTransitions()) {
+			transition.accept(this);
+		}
 		//c(String.format("  state_%s();", state.getNext().getName()));
 		c("}");
 	}
@@ -143,7 +149,7 @@ public class ToC extends Visitor<StringBuffer> {
 			visit(conditionalAction.getActions()[i]);
 			c("    break;");
 		}
-		c("}");
+		c("  }");
 	}
 
 	@Override
@@ -154,16 +160,31 @@ public class ToC extends Visitor<StringBuffer> {
 		c("}");
 	}
 
-    // Our sensor code
+	@Override
+	public void visit(VariableAction variableAction) {
+		switch (variableAction.getAction_type()) {
+			case SET:
+				c(String.format("%s = %s;", variableAction.getVariable().getName(), variableAction.getNew_value()));
+				break;
+			case INCREMENT:
+				c(String.format("%s++;", variableAction.getVariable()));
+				break;
+			case DECREMENT:
+				c(String.format("%s--;", variableAction.getVariable()));
+				break;
+		}
+	}
+
+	// Our sensor code
 	@Override
 	public void visit(Sensor sensor) {
 	    if (sensor.getValue() == SIGNAL.HIGH) {
-            c(String.format("  else if (!digitalRead(%s)) {",sensor.getActuator().getName()));
-            c("    do_event(BUTTON_PRESSED_EVENT);");
-            c("  }");
-        } else {
             c(String.format("  else if (digitalRead(%s)) {",sensor.getActuator().getName()));
             c("    do_event(BUTTON_RELEASED_EVENT);");
+            c("  }");
+        } else {
+            c(String.format("  else if (!digitalRead(%s)) {",sensor.getActuator().getName()));
+            c("    do_event(BUTTON_PRESSED_EVENT);");
             c("  }");
         }
 

@@ -10,6 +10,7 @@ public abstract class Visitor<T> {
 	public abstract void visit(Action action);
 	public abstract void visit(ConditionalAction conditionalAction);
 	public abstract void visit(DelayedAction delayedAction);
+	public abstract void visit(VariableAction variableAction);
 	public abstract void visit(Actuator actuator);
 	public abstract void visit(Sensor sensor);
 	public abstract void visit(Transition transition);

@@ -11,6 +11,7 @@ public class State implements NamedElement, Visitable {
 	private String name;
 	private List<Action> actions = new ArrayList<Action>();
 	private List<Transition> transitions = new ArrayList<Transition>();
+	private List<Variable> variables = new ArrayList<>();
 
 	@Override public String getName() {
 		return name;
@@ -34,5 +35,13 @@ public class State implements NamedElement, Visitable {
     @Override
 	public void accept(Visitor visitor) {
 		visitor.visit(this);
+	}
+
+	public List<Variable> getVariables() {
+		return variables;
+	}
+
+	public void setVariables(List<Variable> variables) {
+		this.variables = variables;
 	}
 }

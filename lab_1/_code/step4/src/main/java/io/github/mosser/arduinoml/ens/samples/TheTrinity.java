@@ -38,12 +38,12 @@ public class TheTrinity {
         ////////////////////////////////
 
         Variable count = new Variable();
-        count.setType("int");
+        count.setType(TYPE.INTEGER);
         count.setName("count");
         count.setInitialValue("0");
 
         Variable sevenSegLastUpdated = new Variable();
-        sevenSegLastUpdated.setType("unsigned long");
+        sevenSegLastUpdated.setType(TYPE.LONG);
         sevenSegLastUpdated.setName("seven_seg_last_updated");
         sevenSegLastUpdated.setInitialValue("0");
 
@@ -156,9 +156,16 @@ public class TheTrinity {
             conditionalActions[i] = conditionalAction;
         }
 
-        Action resetCount = new Action();
-        resetCount.setActuator(led);
-        resetCount.setValue(SIGNAL.HIGH);
+        VariableAction resetCount = new VariableAction();
+        resetCount.setVariable(count);
+        resetCount.setAction_type(VACTIONTYPE.SET);
+        resetCount.setNew_value("0");
+
+        VariableAction incrementCount = new VariableAction();
+        incrementCount.setVariable(count);
+        incrementCount.setAction_type(VACTIONTYPE.INCREMENT);
+
+
 
         ////////////////////////////////
         //////////////STATES////////////
@@ -184,6 +191,7 @@ public class TheTrinity {
 
         State sevenSegCounting = new State();
         sevenSegCounting.setName(String.format("%s_state_counting", sevenSegStateMachineName));
+        sevenSegCounting.setVariables(Arrays.asList(count, sevenSegLastUpdated));
 
         State sevenSegReset = new State();
         sevenSegReset.setName(String.format("%s_state_reset", sevenSegStateMachineName));
