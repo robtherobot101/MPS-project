@@ -8,62 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-public class Led {
+public class LedBaitAndSwitch {
 
-	public static void main(String[] args) {
-
-
-//		Actuator led = new Actuator();
-//		led.setName("LED");
-//		led.setPin(13);
-//
-//		// Declaring states
-//		State on = new State();
-//		on.setName("on");
-//
-//		State off = new State();
-//		off.setName("off");
-//
-//		// Creating actions
-//		Action switchTheLightOn = new Action();
-//		switchTheLightOn.setActuator(led);
-//		switchTheLightOn.setValue(SIGNAL.HIGH);
-//
-//		Action switchTheLightOff = new Action();
-//		switchTheLightOff.setActuator(led);
-//		switchTheLightOff.setValue(SIGNAL.LOW);
-//
-//		// Binding actions to states
-//		on.setActions(Arrays.asList(switchTheLightOn));
-//		off.setActions(Arrays.asList(switchTheLightOff));
-//
-//		// Binding transitions to states
-//		// Does that mean that state.next() is calling a transition? - A transition needs a source, target, and event
-////		on.setNext(off);
-////		off.setNext(on);
-//
-//		// Building the App
-//		App theSwitch = new App();
-//		theSwitch.setName("Led!");
-//		theSwitch.setBricks(Arrays.asList(led));
-//		theSwitch.setStates(Arrays.asList(on, off));
-//		theSwitch.setInitial(on);
-//
-//		// Generating Code
-//		Visitor codeGenerator = new ToC();
-//		theSwitch.accept(codeGenerator);
-//
-//		// Writing C files
-//        try {
-//            System.out.println("Generating C code: ./output/fsm.h");
-//            Files.write(Paths.get("./output/fsm.h"), codeGenerator.getHeaders().toString().getBytes());
-//            System.out.println("Generating C code: ./output/main.c");
-//            Files.write(Paths.get("./output/main.c"), codeGenerator.getCode().toString().getBytes());
-//            System.out.println("Code generation: done");
-//            System.out.println("Board upload : cd output && make upload && cd ..;");
-//        } catch (IOException e) {
-//            System.err.println(e);
-//        }
+    public static void main(String[] args) {
 
 
         // Name of the state machine
@@ -85,7 +32,7 @@ public class Led {
         // Creating Sensors
         Sensor isPressed = new Sensor();
         isPressed.setActuator(button);
-        isPressed.setValue(SIGNAL.LOW); // checking button is pressed is LOW common cathode
+        isPressed.setValue(SIGNAL.LOW);
 
         Sensor isReleased = new Sensor();
         isReleased.setActuator(button);
@@ -110,6 +57,9 @@ public class Led {
         release.setEvent(EVENT.BUTTON_PRESSED);
         release.setName(buttonStateMachineName);
         release.setTrigger(isReleased);
+
+
+
 
         // Declaring states - Note we must prefix the name of the state with the name of the app (state machine)
         State on = new State();
@@ -175,11 +125,6 @@ public class Led {
         } catch (IOException e) {
             System.err.println(e);
         }
-
-
-	}
-
-
-
+    }
 
 }

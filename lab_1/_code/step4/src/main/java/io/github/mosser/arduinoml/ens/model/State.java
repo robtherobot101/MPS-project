@@ -10,7 +10,7 @@ public class State implements NamedElement, Visitable {
 
 	private String name;
 	private List<Action> actions = new ArrayList<Action>();
-	private State next;
+	private List<Transition> transitions = new ArrayList<Transition>();
 
 	@Override public String getName() {
 		return name;
@@ -26,14 +26,12 @@ public class State implements NamedElement, Visitable {
 		this.actions = actions;
 	}
 
-	public State getNext() {
-		return next;
-	}
-	public void setNext(State next) {
-		this.next = next;
-	}
 
-	@Override
+    public List<Transition> getTransitions() { return transitions; }
+
+    public void setTransitions(List<Transition> transitions) { this.transitions = transitions; }
+
+    @Override
 	public void accept(Visitor visitor) {
 		visitor.visit(this);
 	}

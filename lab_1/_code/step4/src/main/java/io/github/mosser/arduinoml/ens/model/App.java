@@ -11,6 +11,7 @@ public class App implements NamedElement, Visitable {
 	private List<Variable> variables = new ArrayList<>();
 	private List<Actuator> actuators = new ArrayList<Actuator>();
 	private List<State> states = new ArrayList<State>();
+	private List<State> initialStates = new ArrayList<>();
 	private State initial;
 
 	@Override
@@ -54,6 +55,10 @@ public class App implements NamedElement, Visitable {
 	public void setInitial(State initial) {
 		this.initial = initial;
 	}
+
+	public List<State> getInitialStates() { return initialStates; }
+
+	public void setInitialStates(List<State> initialStates) { this.initialStates = initialStates; }
 
 	@Override
 	public void accept(Visitor visitor) {
