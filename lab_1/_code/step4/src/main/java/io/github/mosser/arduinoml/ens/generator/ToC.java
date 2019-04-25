@@ -93,6 +93,14 @@ public class ToC extends Visitor<StringBuffer> {
 	}
 
 	@Override
+	public void visit(VariableGreater variableGreater) {
+		c(String.format("if(%s > %d) {", variableGreater.getVariable().getName(), variableGreater.getThreshold()));
+		c(String.format("do_event(%s);", variableGreater.getEvent().getName()));
+		c("}");
+
+	}
+
+	@Override
 	public void visit(Actuator actuator) {
 	 	c(String.format("  pinMode(%s, %s); // %s [Actuator]", actuator.getName(), actuator.getMode(), actuator.getName()));
 	}
@@ -131,6 +139,10 @@ public class ToC extends Visitor<StringBuffer> {
 			transition.accept(this);
 		}
 		//c(String.format("  state_%s();", state.getNext().getName()));
+
+		for (VariableGreater variableGreater : state.getVariableGreaters()) {
+			visit(variableGreater);
+		}
 		c("}");
 	}
 
@@ -167,10 +179,10 @@ public class ToC extends Visitor<StringBuffer> {
 				c(String.format("%s = %s;", variableAction.getVariable().getName(), variableAction.getNew_value()));
 				break;
 			case INCREMENT:
-				c(String.format("%s++;", variableAction.getVariable()));
+				c(String.format("%s++;", variableAction.getVariable().getName()));
 				break;
 			case DECREMENT:
-				c(String.format("%s--;", variableAction.getVariable()));
+				c(String.format("%s--;", variableAction.getVariable().getName()));
 				break;
 		}
 	}
@@ -194,6 +206,9 @@ public class ToC extends Visitor<StringBuffer> {
 	@Override
 	public void visit(Transition transition) {
         c(String.format("  if(event == %s) {", transition.getEvent().getName()));
+        if (transition.getAction() != null) {
+        	visit(transition.getAction());
+		}
         c(String.format("    %s_state_machine = &%s;", transition.getName(), transition.getTarget().getName()));
         c("  }");
 	    if (transition.getTrigger() != null) {

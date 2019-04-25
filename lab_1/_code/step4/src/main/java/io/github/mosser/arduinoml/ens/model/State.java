@@ -12,6 +12,7 @@ public class State implements NamedElement, Visitable {
 	private List<Action> actions = new ArrayList<Action>();
 	private List<Transition> transitions = new ArrayList<Transition>();
 	private List<Variable> variables = new ArrayList<>();
+	private List<VariableGreater> variableGreaters = new ArrayList<>();
 
 	@Override public String getName() {
 		return name;
@@ -43,5 +44,13 @@ public class State implements NamedElement, Visitable {
 
 	public void setVariables(List<Variable> variables) {
 		this.variables = variables;
+	}
+
+	public List<VariableGreater> getVariableGreaters() {
+		return variableGreaters;
+	}
+
+	public void setVariableGreaters(List<VariableGreater> variableGreaters) {
+		this.variableGreaters = variableGreaters;
 	}
 }

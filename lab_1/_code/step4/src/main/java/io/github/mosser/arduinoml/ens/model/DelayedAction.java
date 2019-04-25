@@ -6,7 +6,7 @@ public class DelayedAction extends Action{
 
     private Variable timer;
     private int delay;
-    private Action action;
+    private VariableAction action;
 
     public void setTimer(Variable timer) {
         this.timer = timer;
@@ -24,11 +24,11 @@ public class DelayedAction extends Action{
         return delay;
     }
 
-    public void setAction(Action action) {
+    public void setAction(VariableAction action) {
         this.action = action;
     }
 
-    public Action getAction() {
+    public VariableAction getAction() {
         return action;
     }
 

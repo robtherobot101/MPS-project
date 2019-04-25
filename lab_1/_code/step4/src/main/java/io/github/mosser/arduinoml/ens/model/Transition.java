@@ -12,6 +12,7 @@ public class Transition implements NamedElement, Visitable {
     private Event event;
     private Sensor trigger;
     private State target;
+    private VariableAction action;
 
     @Override public String getName() {
         return name;
@@ -31,9 +32,17 @@ public class Transition implements NamedElement, Visitable {
 
     public State getTarget() { return target; }
 
-    public void setTarget(io.github.mosser.arduinoml.ens.model.State target) { this.target = target; }
+    public void setTarget(State target) { this.target = target; }
 
     public Sensor getTrigger() { return trigger; }
 
     public void setTrigger(Sensor trigger) { this.trigger = trigger; }
+
+    public VariableAction getAction() {
+        return action;
+    }
+
+    public void setAction(VariableAction action) {
+        this.action = action;
+    }
 }

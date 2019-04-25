@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@SuppressWarnings("ALL")
+
 public class TheTrinity {
 
     public static void main(String[] args) {
@@ -108,7 +108,7 @@ public class TheTrinity {
         Event buttonReleased = new Event();
         buttonReleased.setName("button_released");
         Event sevenSegOverflow = new Event();
-        sevenSegOverflow.setName("sevenseg_overflow");
+        sevenSegOverflow.setName("sevenseg_reset");
 
         ////////////////////////////////
         /////////////ACTIONS////////////
@@ -143,11 +143,6 @@ public class TheTrinity {
             }
         }
 
-        DelayedAction resetTimerAction = new DelayedAction();
-        resetTimerAction.setDelay(1000);
-        resetTimerAction.setTimer(sevenSegLastUpdated);
-        resetTimerAction.setAction(sevenSegActions[0][0]);
-
         ConditionalAction[] conditionalActions = new ConditionalAction[7];
         for (int i = 0; i < conditionalActions.length; i++) {
             ConditionalAction conditionalAction = new ConditionalAction();
@@ -165,6 +160,10 @@ public class TheTrinity {
         incrementCount.setVariable(count);
         incrementCount.setAction_type(VACTIONTYPE.INCREMENT);
 
+        DelayedAction IncrementAfterDelay = new DelayedAction();
+        IncrementAfterDelay.setDelay(1000);
+        IncrementAfterDelay.setTimer(sevenSegLastUpdated);
+        IncrementAfterDelay.setAction(incrementCount);
 
 
         ////////////////////////////////
@@ -210,6 +209,13 @@ public class TheTrinity {
         countOverflown.setName(sevenSegStateMachineName);
         countOverflown.setEvent(sevenSegOverflow);
         countOverflown.setTarget(sevenSegReset);
+        countOverflown.setAction(resetCount);
+
+        Transition resetAfterButton = new Transition();
+        resetAfterButton.setName(sevenSegStateMachineName);
+        resetAfterButton.setEvent(buttonPressed);
+        resetAfterButton.setTarget(sevenSegReset);
+        resetAfterButton.setAction(resetCount);
 
         Transition countReset = new Transition();
         countReset.setName(sevenSegStateMachineName);
@@ -217,7 +223,7 @@ public class TheTrinity {
         countReset.setTarget(sevenSegCounting);
 
         sevenSegInitialise.setTransitions(Arrays.asList(initialiseFinished));
-        sevenSegCounting.setTransitions(Arrays.asList(countOverflown));
+        sevenSegCounting.setTransitions(Arrays.asList(countOverflown, resetAfterButton));
         sevenSegReset.setTransitions(Arrays.asList(countReset));
 
         // LED
@@ -257,11 +263,15 @@ public class TheTrinity {
 
         // SINGLE SEGMENTS
         List<Action> actions = new ArrayList<>(Arrays.asList(conditionalActions));
-        actions.add(resetTimerAction);
+        actions.add(IncrementAfterDelay);
         sevenSegCounting.setActions(actions);
 
         //SEVENSEG RESET
-        sevenSegReset.setActions(Arrays.asList(resetCount));
+        VariableGreater variableGreater = new VariableGreater();
+        variableGreater.setEvent(sevenSegOverflow);
+        variableGreater.setThreshold(9);
+        variableGreater.setVariable(count);
+        sevenSegCounting.setVariableGreaters(Arrays.asList(variableGreater));
 
         // LED
         ledOn.setActions(Arrays.asList(switchTheLightOn));
