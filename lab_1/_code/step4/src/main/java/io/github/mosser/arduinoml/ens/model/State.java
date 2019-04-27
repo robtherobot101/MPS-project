@@ -9,7 +9,7 @@ import java.util.List;
 public class State implements NamedElement, Visitable {
 
 	private String name;
-	private List<Action> actions = new ArrayList<Action>();
+	private List<Actionable> actions = new ArrayList<>();
 	private List<Transition> transitions = new ArrayList<Transition>();
 	private List<Variable> variables = new ArrayList<>();
 	private List<VariableGreater> variableGreaters = new ArrayList<>();
@@ -21,10 +21,10 @@ public class State implements NamedElement, Visitable {
 		this.name = name;
 	}
 
-	public List<Action> getActions() {
+	public List<Actionable> getActions() {
 		return actions;
 	}
-	public void setActions(List<Action> actions) {
+	public void setActions(List<Actionable> actions) {
 		this.actions = actions;
 	}
 

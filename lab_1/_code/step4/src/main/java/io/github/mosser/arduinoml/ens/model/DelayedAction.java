@@ -2,7 +2,7 @@ package io.github.mosser.arduinoml.ens.model;
 
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
-public class DelayedAction extends Action{
+public class DelayedAction implements Actionable {
 
     private Variable timer;
     private int delay;

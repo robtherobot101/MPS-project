@@ -87,19 +87,19 @@
 //        initialise.setTransitions(Arrays.asList(initialiseFinished));
 //
 //        // Creating actions
-//        Action set_prop1 = new Action();
+//        ActuatorAction set_prop1 = new ActuatorAction();
 //        set_prop1.setActuator(seven_seg_prop1);
 //        set_prop1.setValue(SIGNAL.LOW);
 //
-//        Action set_prop2 = new Action();
+//        ActuatorAction set_prop2 = new ActuatorAction();
 //        set_prop2.setActuator(seven_seg_prop2);
 //        set_prop2.setValue(SIGNAL.HIGH);
 //
 //        // Seven Seg Actions
-//        Action[][] sevenSegActions = new Action[7][10];
+//        ActuatorAction[][] sevenSegActions = new ActuatorAction[7][10];
 //        for (int i = 0; i < NUMBERS.length; i++) {
 //            for (int j = 0; j < 7; j++) {
-//                Action action = new Action();
+//                ActuatorAction action = new ActuatorAction();
 //                action.setActuator(sevenSegActuators[j]);
 //                action.setValue(NUMBERS[i][j]);
 //                sevenSegActions[j][i] = action;
@@ -122,7 +122,7 @@
 //
 //        // Binding actions to states
 //        initialise.setActions(Arrays.asList(set_prop1, set_prop2));
-//        List<Action> things = new ArrayList<>(Arrays.asList(conditionalActions));
+//        List<ActuatorAction> things = new ArrayList<>(Arrays.asList(conditionalActions));
 //        things.add(resetTimerAction);
 //        counting.setActions(things);
 //

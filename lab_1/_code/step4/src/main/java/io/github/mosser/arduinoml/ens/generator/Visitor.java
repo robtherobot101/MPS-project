@@ -8,7 +8,7 @@ public abstract class Visitor<T> {
 	public abstract void visit(State state);
 	public abstract void visit(Variable variable);
 	public abstract void visit(VariableGreater variableGreater);
-	public abstract void visit(Action action);
+	public abstract void visit(ActuatorAction action);
 	public abstract void visit(ConditionalAction conditionalAction);
 	public abstract void visit(DelayedAction delayedAction);
 	public abstract void visit(VariableAction variableAction);

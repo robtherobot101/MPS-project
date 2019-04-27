@@ -4,6 +4,7 @@ import io.github.mosser.arduinoml.ens.generator.ToC;
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 import io.github.mosser.arduinoml.ens.model.*;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -115,28 +116,28 @@ public class TheTrinity {
         ////////////////////////////////
 
         // LED
-        Action switchTheLightOn = new Action();
+        ActuatorAction switchTheLightOn = new ActuatorAction();
         switchTheLightOn.setActuator(led);
         switchTheLightOn.setValue(SIGNAL.HIGH);
 
-        Action switchTheLightOff = new Action();
+        ActuatorAction switchTheLightOff = new ActuatorAction();
         switchTheLightOff.setActuator(led);
         switchTheLightOff.setValue(SIGNAL.LOW);
 
         // SEVEN SEGMENT DISPLAY SELECTORS
-        Action set_prop1 = new Action();
+        ActuatorAction set_prop1 = new ActuatorAction();
         set_prop1.setActuator(seven_seg_prop1);
         set_prop1.setValue(SIGNAL.LOW);
 
-        Action set_prop2 = new Action();
+        ActuatorAction set_prop2 = new ActuatorAction();
         set_prop2.setActuator(seven_seg_prop2);
         set_prop2.setValue(SIGNAL.HIGH);
 
         // SINGLE SEGMENT ACTIONS
-        Action[][] sevenSegActions = new Action[7][10];
+        ActuatorAction[][] sevenSegActions = new ActuatorAction[7][10];
         for (int i = 0; i < NUMBERS.length; i++) {
             for (int j = 0; j < 7; j++) {
-                Action action = new Action();
+                ActuatorAction action = new ActuatorAction();
                 action.setActuator(sevenSegActuators[j]);
                 action.setValue(NUMBERS[i][j]);
                 sevenSegActions[j][i] = action;
@@ -262,7 +263,7 @@ public class TheTrinity {
         sevenSegInitialise.setActions(Arrays.asList(set_prop1, set_prop2));
 
         // SINGLE SEGMENTS
-        List<Action> actions = new ArrayList<>(Arrays.asList(conditionalActions));
+        List<Actionable> actions = new ArrayList<>(Arrays.asList(conditionalActions));
         actions.add(IncrementAfterDelay);
         sevenSegCounting.setActions(actions);
 

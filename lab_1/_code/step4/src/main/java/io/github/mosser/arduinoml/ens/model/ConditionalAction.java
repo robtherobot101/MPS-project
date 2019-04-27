@@ -3,10 +3,10 @@ package io.github.mosser.arduinoml.ens.model;
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
 
-public class ConditionalAction extends Action {
+public class ConditionalAction implements Actionable {
 
     private Variable variable;
-    private Action[] actions;
+    private Actionable[] actions;
 
 	@Override
 	public void accept(Visitor visitor) {
@@ -21,11 +21,11 @@ public class ConditionalAction extends Action {
         this.variable = value;
     }
 
-    public void setActions(Action[] actions) {
+    public void setActions(Actionable[] actions) {
         this.actions = actions;
     }
 
-    public Action[] getActions() {
+    public Actionable[] getActions() {
         return actions;
     }
 }

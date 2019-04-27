@@ -126,7 +126,7 @@ public class ToC extends Visitor<StringBuffer> {
 			c(String.format("  static %s %s = %s;", typeString, variable.getName(), variable.getInitialValue()));
 		}
 
-		for(Action action: state.getActions()) {
+		for(Actionable action: state.getActions()) {
 			action.accept(this);
 		}
 		// this delay is an action itself
@@ -148,7 +148,7 @@ public class ToC extends Visitor<StringBuffer> {
 
 
 	@Override
-	public void visit(Action action) {
+	public void visit(ActuatorAction action) {
 	    // Command for action
 		c(String.format("  digitalWrite(%s,%s);",action.getActuator().getName(),action.getValue()));
 	}
@@ -158,7 +158,7 @@ public class ToC extends Visitor<StringBuffer> {
 		c(String.format("  switch(%s) { \n", conditionalAction.getVariable().getName()));
 		for (int i = 0; i < conditionalAction.getActions().length; i++) {
 			c(String.format("    case %d: ", i));
-			visit(conditionalAction.getActions()[i]);
+			conditionalAction.getActions()[i].accept(this);
 			c("    break;");
 		}
 		c("  }");
@@ -207,7 +207,7 @@ public class ToC extends Visitor<StringBuffer> {
 	public void visit(Transition transition) {
         c(String.format("  if(event == %s) {", transition.getEvent().getName()));
         if (transition.getAction() != null) {
-        	visit(transition.getAction());
+        	transition.getAction().accept(this);
 		}
         c(String.format("    %s_state_machine = &%s;", transition.getName(), transition.getTarget().getName()));
         c("  }");

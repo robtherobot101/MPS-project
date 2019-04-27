@@ -12,7 +12,7 @@ public class Transition implements NamedElement, Visitable {
     private Event event;
     private Sensor trigger;
     private State target;
-    private VariableAction action;
+    private Actionable action;
 
     @Override public String getName() {
         return name;
@@ -38,11 +38,11 @@ public class Transition implements NamedElement, Visitable {
 
     public void setTrigger(Sensor trigger) { this.trigger = trigger; }
 
-    public VariableAction getAction() {
+    public Actionable getAction() {
         return action;
     }
 
-    public void setAction(VariableAction action) {
+    public void setAction(Actionable action) {
         this.action = action;
     }
 }
