@@ -81,7 +81,7 @@
 //        // Transitions
 //        Transition initialiseFinished = new Transition();
 //        initialiseFinished.setName(sevenSegStateMachineName);
-//        initialiseFinished.setEvent(null_event);
+//        initialiseFinished.setEventTrigger(null_event);
 //        initialiseFinished.setTarget(counting);
 //
 //        initialise.setTransitions(Arrays.asList(initialiseFinished));

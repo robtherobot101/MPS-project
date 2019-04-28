@@ -3,11 +3,10 @@ package io.github.mosser.arduinoml.ens.model;
 import io.github.mosser.arduinoml.ens.generator.Visitable;
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
-public class VariableGreater implements Visitable {
+public class VariableGreaterTrigger extends Trigger {
 
     private Variable variable;
     private int threshold;
-    private Event event;
 
     @Override
     public void accept(Visitor visitor) {
@@ -28,13 +27,5 @@ public class VariableGreater implements Visitable {
 
     public void setThreshold(int threshold) {
         this.threshold = threshold;
-    }
-
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
     }
 }

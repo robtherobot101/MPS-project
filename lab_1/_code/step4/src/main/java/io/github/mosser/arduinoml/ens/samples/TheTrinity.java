@@ -3,8 +3,8 @@ package io.github.mosser.arduinoml.ens.samples;
 import io.github.mosser.arduinoml.ens.generator.ToC;
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 import io.github.mosser.arduinoml.ens.model.*;
+import io.github.mosser.arduinoml.ens.model.Action;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -85,18 +85,6 @@ public class TheTrinity {
         button.setPin(10);
         button.setMode(MODE.INPUT);
 
-        ////////////////////////////////
-        /////////////SENSORS////////////
-        ////////////////////////////////
-
-        Sensor isPressed = new Sensor();
-        isPressed.setActuator(button);
-        isPressed.setValue(SIGNAL.LOW);
-
-        Sensor isReleased = new Sensor();
-        isReleased.setActuator(button);
-        isReleased.setValue(SIGNAL.HIGH);
-
 
         ////////////////////////////////
         /////////////EVENTS/////////////
@@ -110,6 +98,23 @@ public class TheTrinity {
         buttonReleased.setName("button_released");
         Event sevenSegOverflow = new Event();
         sevenSegOverflow.setName("sevenseg_reset");
+
+
+        ////////////////////////////////
+        /////////////SENSORS////////////
+        ////////////////////////////////
+
+        Sensor isPressed = new Sensor();
+        isPressed.setActuator(button);
+        isPressed.setValue(SIGNAL.LOW);
+        isPressed.setEvent(buttonPressed);
+
+        Sensor isReleased = new Sensor();
+        isReleased.setActuator(button);
+        isReleased.setValue(SIGNAL.HIGH);
+        isReleased.setEvent(buttonReleased);
+
+
 
         ////////////////////////////////
         /////////////ACTIONS////////////
@@ -181,9 +186,11 @@ public class TheTrinity {
         // BUTTON
         State buttonUp = new State();
         buttonUp.setName(String.format("%s_state_up", buttonStateMachineName));
+        buttonUp.setTriggers(Arrays.asList(isPressed));
 
         State buttonDown = new State();
         buttonDown.setName(String.format("%s_state_down", buttonStateMachineName));
+        buttonDown.setTriggers(Arrays.asList(isReleased));
 
         // SEVEN SEGMENT DISPLAY
         State sevenSegInitialise = new State();
@@ -203,24 +210,24 @@ public class TheTrinity {
         // SEVEN SEGMENT
         Transition initialiseFinished = new Transition();
         initialiseFinished.setName(sevenSegStateMachineName);
-        initialiseFinished.setEvent(null_event);
+        initialiseFinished.setEventTrigger(null_event);
         initialiseFinished.setTarget(sevenSegCounting);
 
         Transition countOverflown = new Transition();
         countOverflown.setName(sevenSegStateMachineName);
-        countOverflown.setEvent(sevenSegOverflow);
+        countOverflown.setEventTrigger(sevenSegOverflow);
         countOverflown.setTarget(sevenSegReset);
         countOverflown.setAction(resetCount);
 
         Transition resetAfterButton = new Transition();
         resetAfterButton.setName(sevenSegStateMachineName);
-        resetAfterButton.setEvent(buttonPressed);
+        resetAfterButton.setEventTrigger(buttonPressed);
         resetAfterButton.setTarget(sevenSegReset);
         resetAfterButton.setAction(resetCount);
 
         Transition countReset = new Transition();
         countReset.setName(sevenSegStateMachineName);
-        countReset.setEvent(null_event);
+        countReset.setEventTrigger(null_event);
         countReset.setTarget(sevenSegCounting);
 
         sevenSegInitialise.setTransitions(Arrays.asList(initialiseFinished));
@@ -229,12 +236,12 @@ public class TheTrinity {
 
         // LED
         Transition turnOn = new Transition();
-        turnOn.setEvent(buttonPressed);
+        turnOn.setEventTrigger(buttonPressed);
         turnOn.setName(ledStateMachineName);
         turnOn.setTarget(ledOn);
 
         Transition turnOff = new Transition();
-        turnOff.setEvent(buttonPressed);
+        turnOff.setEventTrigger(buttonPressed);
         turnOff.setName(ledStateMachineName);
         turnOff.setTarget(ledOff);
 
@@ -243,15 +250,13 @@ public class TheTrinity {
 
         // BUTTON
         Transition push = new Transition();
-        push.setEvent(buttonPressed);
+        push.setEventTrigger(buttonPressed);
         push.setName(buttonStateMachineName);
-        push.setTrigger(isPressed);
         push.setTarget(buttonDown);
 
         Transition release = new Transition();
-        release.setEvent(buttonReleased);
+        release.setEventTrigger(buttonReleased);
         release.setName(buttonStateMachineName);
-        release.setTrigger(isReleased);
         release.setTarget(buttonUp);
 
         buttonDown.setTransitions(Arrays.asList(release));
@@ -263,16 +268,19 @@ public class TheTrinity {
         sevenSegInitialise.setActions(Arrays.asList(set_prop1, set_prop2));
 
         // SINGLE SEGMENTS
-        List<Actionable> actions = new ArrayList<>(Arrays.asList(conditionalActions));
+        List<Action> actions = new ArrayList<>(Arrays.asList(conditionalActions));
         actions.add(IncrementAfterDelay);
         sevenSegCounting.setActions(actions);
 
+        // EVENT TRIGGERS
         //SEVENSEG RESET
-        VariableGreater variableGreater = new VariableGreater();
-        variableGreater.setEvent(sevenSegOverflow);
-        variableGreater.setThreshold(9);
-        variableGreater.setVariable(count);
-        sevenSegCounting.setVariableGreaters(Arrays.asList(variableGreater));
+        VariableGreaterTrigger variableGreaterTrigger = new VariableGreaterTrigger();
+        variableGreaterTrigger.setEvent(sevenSegOverflow);
+        variableGreaterTrigger.setThreshold(9);
+        variableGreaterTrigger.setVariable(count);
+        sevenSegCounting.setTriggers(Arrays.asList(variableGreaterTrigger));
+
+
 
         // LED
         ledOn.setActions(Arrays.asList(switchTheLightOn));

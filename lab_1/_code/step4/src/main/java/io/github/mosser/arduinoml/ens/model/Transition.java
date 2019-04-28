@@ -3,16 +3,12 @@ package io.github.mosser.arduinoml.ens.model;
 import io.github.mosser.arduinoml.ens.generator.Visitable;
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Transition implements NamedElement, Visitable {
 
     private String name; // might not need this
-    private Event event;
-    private Sensor trigger;
+    private Event eventTrigger;
     private State target;
-    private Actionable action;
+    private Action action;
 
     @Override public String getName() {
         return name;
@@ -26,23 +22,19 @@ public class Transition implements NamedElement, Visitable {
     }
 
 
-    public Event getEvent() { return event; }
+    public Event getEventTrigger() { return eventTrigger; }
 
-    public void setEvent(Event event) { this.event = event; }
+    public void setEventTrigger(Event eventTrigger) { this.eventTrigger = eventTrigger; }
 
     public State getTarget() { return target; }
 
     public void setTarget(State target) { this.target = target; }
 
-    public Sensor getTrigger() { return trigger; }
-
-    public void setTrigger(Sensor trigger) { this.trigger = trigger; }
-
-    public Actionable getAction() {
+    public Action getAction() {
         return action;
     }
 
-    public void setAction(Actionable action) {
+    public void setAction(Action action) {
         this.action = action;
     }
 }

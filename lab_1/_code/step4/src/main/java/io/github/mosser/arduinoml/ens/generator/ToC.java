@@ -89,13 +89,24 @@ public class ToC extends Visitor<StringBuffer> {
 
 	@Override
 	public void visit(Variable variable) {
-		c(String.format("%s %s = %s;", variable.getType(), variable.getName(), variable.getInitialValue()));
+		String typeString = "int";
+		switch(variable.getType()) {
+			case LONG:
+				typeString = "unsigned long";
+				break;
+			case INTEGER:
+				typeString = "int";
+				break;
+			case STRING:
+				typeString = "char*[]";
+		}
+		c(String.format("  static %s %s = %s;", typeString, variable.getName(), variable.getInitialValue()));
 	}
 
 	@Override
-	public void visit(VariableGreater variableGreater) {
-		c(String.format("if(%s > %d) {", variableGreater.getVariable().getName(), variableGreater.getThreshold()));
-		c(String.format("do_event(%s);", variableGreater.getEvent().getName()));
+	public void visit(VariableGreaterTrigger variableGreaterTrigger) {
+		c(String.format("if(%s > %d) {", variableGreaterTrigger.getVariable().getName(), variableGreaterTrigger.getThreshold()));
+		variableGreaterTrigger.getEvent().accept(this);
 		c("}");
 
 	}
@@ -112,21 +123,10 @@ public class ToC extends Visitor<StringBuffer> {
 		c(String.format("void %s(int event) {",state.getName()));
 
 		for (Variable variable : state.getVariables()) {
-			String typeString = "int";
-			switch(variable.getType()) {
-				case LONG:
-					typeString = "unsigned long";
-					break;
-				case INTEGER:
-					typeString = "int";
-					break;
-				case STRING:
-					typeString = "char*[]";
-			}
-			c(String.format("  static %s %s = %s;", typeString, variable.getName(), variable.getInitialValue()));
+			variable.accept(this);
 		}
 
-		for(Actionable action: state.getActions()) {
+		for(Action action: state.getActions()) {
 			action.accept(this);
 		}
 		// this delay is an action itself
@@ -140,8 +140,8 @@ public class ToC extends Visitor<StringBuffer> {
 		}
 		//c(String.format("  state_%s();", state.getNext().getName()));
 
-		for (VariableGreater variableGreater : state.getVariableGreaters()) {
-			visit(variableGreater);
+		for (Trigger trigger : state.getTriggers()) {
+			trigger.accept(this);
 		}
 		c("}");
 	}
@@ -191,30 +191,31 @@ public class ToC extends Visitor<StringBuffer> {
 	@Override
 	public void visit(Sensor sensor) {
 	    if (sensor.getValue() == SIGNAL.HIGH) {
-            c(String.format("  else if (digitalRead(%s)) {",sensor.getActuator().getName()));
-            c("    do_event(BUTTON_RELEASED_EVENT);");
-            c("  }");
-        } else {
-            c(String.format("  else if (!digitalRead(%s)) {",sensor.getActuator().getName()));
-            c("    do_event(BUTTON_PRESSED_EVENT);");
-            c("  }");
+            c(String.format("  if (digitalRead(%s)) {",sensor.getActuator().getName()));
         }
+	    else {
+            c(String.format("  if (!digitalRead(%s)) {",sensor.getActuator().getName()));
+        }
+	    sensor.getEvent().accept(this);
+		c("  }");
 
 	}
 
 	// Our transition code
 	@Override
 	public void visit(Transition transition) {
-        c(String.format("  if(event == %s) {", transition.getEvent().getName()));
+        c(String.format("  if(event == %s) {", transition.getEventTrigger().getName()));
         if (transition.getAction() != null) {
         	transition.getAction().accept(this);
 		}
         c(String.format("    %s_state_machine = &%s;", transition.getName(), transition.getTarget().getName()));
         c("  }");
-	    if (transition.getTrigger() != null) {
-            transition.getTrigger().accept(this);
-        }
     }
+
+	@Override
+	public void visit(Event event) {
+		c(String.format("do_event(%s);", event.getName()));
+	}
 
 
 }

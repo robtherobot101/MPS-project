@@ -41,20 +41,20 @@
 //
 //        // Creating transitions
 //        Transition turnOn = new Transition();
-//        turnOn.setEvent(EVENT.BUTTON_PRESSED);
+//        turnOn.setEventTrigger(EVENT.BUTTON_PRESSED);
 //        turnOn.setName(ledStateMachineName);
 //
 //        Transition turnOff = new Transition();
-//        turnOff.setEvent(EVENT.BUTTON_PRESSED);
+//        turnOff.setEventTrigger(EVENT.BUTTON_PRESSED);
 //        turnOff.setName(ledStateMachineName);
 //
 //        Transition push = new Transition();
-//        push.setEvent(EVENT.BUTTON_RELEASED);
+//        push.setEventTrigger(EVENT.BUTTON_RELEASED);
 //        push.setName(buttonStateMachineName);
 //        push.setTrigger(isPressed);
 //
 //        Transition release = new Transition();
-//        release.setEvent(EVENT.BUTTON_PRESSED);
+//        release.setEventTrigger(EVENT.BUTTON_PRESSED);
 //        release.setName(buttonStateMachineName);
 //        release.setTrigger(isReleased);
 //

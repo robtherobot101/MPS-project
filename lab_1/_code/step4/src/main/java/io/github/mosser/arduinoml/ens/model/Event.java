@@ -1,6 +1,9 @@
 package io.github.mosser.arduinoml.ens.model;
 
-public class Event {
+import io.github.mosser.arduinoml.ens.generator.Visitable;
+import io.github.mosser.arduinoml.ens.generator.Visitor;
+
+public class Event implements Visitable {
 
     private String name;
 
@@ -14,5 +17,10 @@ public class Event {
             name = name + "_event";
         }
         this.name = name.toUpperCase();
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

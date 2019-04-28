@@ -2,7 +2,7 @@ package io.github.mosser.arduinoml.ens.model;
 
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
-public class VariableAction implements Actionable {
+public class VariableAction extends Action {
 
     private Variable variable;
     private VACTIONTYPE action_type;

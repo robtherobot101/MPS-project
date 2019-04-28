@@ -30,19 +30,19 @@ void setup(){
   sevenseg_state_machine = &sevenseg_state_initialising;
 }
 
-void do_event(int event)
+void do_event(int eventTrigger)
 {
-  sevenseg_state_machine(event);
+  sevenseg_state_machine(eventTrigger);
 }
 
-void sevenseg_state_initialising(int event) {
+void sevenseg_state_initialising(int eventTrigger) {
   digitalWrite(SEVENSEG_PROP1,LOW);
   digitalWrite(SEVENSEG_PROP2,HIGH);
-  if(event == NULL_EVENT) {
+  if(eventTrigger == NULL_EVENT) {
     sevenseg_state_machine = &sevenseg_state_counting;
   }
 }
-void sevenseg_state_counting(int event) {
+void sevenseg_state_counting(int eventTrigger) {
 switch(count) { 
 
 case 0: 

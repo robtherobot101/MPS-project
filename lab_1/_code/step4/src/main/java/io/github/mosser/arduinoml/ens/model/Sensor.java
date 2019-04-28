@@ -4,7 +4,7 @@ import io.github.mosser.arduinoml.ens.generator.Visitable;
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
 
-public class Sensor implements Visitable {
+public class Sensor extends Trigger {
 
 
     private SIGNAL value;

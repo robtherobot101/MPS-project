@@ -24,11 +24,11 @@
 //
 //        // Creating transitions
 //        Transition turnOn = new Transition();
-//        turnOn.setEvent(EVENT.NULL_EVENT);
+//        turnOn.setEventTrigger(EVENT.NULL_EVENT);
 //        turnOn.setName(stateMachineName);
 //
 //        Transition turnOff = new Transition();
-//        turnOff.setEvent(EVENT.NULL_EVENT);
+//        turnOff.setEventTrigger(EVENT.NULL_EVENT);
 //        turnOff.setName(stateMachineName);
 //
 //        // Declaring states - Note we must prefix the name of the state with the name of the app (state machine)
