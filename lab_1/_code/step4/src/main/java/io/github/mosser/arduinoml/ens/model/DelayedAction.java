@@ -2,6 +2,9 @@ package io.github.mosser.arduinoml.ens.model;
 
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
+/**
+ * An action which is only executed after a certain amount of time has elapsed since its last execution
+ */
 public class DelayedAction extends Action {
 
     private Variable timer;

@@ -3,12 +3,15 @@ package io.github.mosser.arduinoml.ens.model;
 import io.github.mosser.arduinoml.ens.generator.Visitable;
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
+/**
+ * Represents a transition between two states
+ */
 public class Transition implements NamedElement, Visitable {
 
-    private String name; // might not need this
-    private Event eventTrigger;
-    private State target;
-    private Action action;
+    private String name;
+    private Event eventTrigger; // The event which triggers the transition
+    private State target;       // The state to which to transition to
+    private Action action;      // The action to perform before transitioning
 
     @Override public String getName() {
         return name;

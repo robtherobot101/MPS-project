@@ -2,6 +2,9 @@ package io.github.mosser.arduinoml.ens.model;
 
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
+/**
+ * Concrete implementation of Action which represents writing to an output device
+ */
 public class ActuatorAction extends Action {
 
 	private SIGNAL value;
