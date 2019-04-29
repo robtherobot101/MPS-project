@@ -239,7 +239,7 @@ public class ToC extends Visitor<StringBuffer> {
 
 	@Override
 	public void visit(Event event) {
-	    
+
 		c(String.format("do_event(%s);", event.getName()));
 	}
 
