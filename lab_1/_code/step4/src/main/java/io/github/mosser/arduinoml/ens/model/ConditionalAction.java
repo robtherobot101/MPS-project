@@ -2,7 +2,9 @@ package io.github.mosser.arduinoml.ens.model;
 
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
-
+/**
+ * Chooses an action to execute depending on the state of some variable
+ */
 public class ConditionalAction extends Action {
 
     private Variable variable;

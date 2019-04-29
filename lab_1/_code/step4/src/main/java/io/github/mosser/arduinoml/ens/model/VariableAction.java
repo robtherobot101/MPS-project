@@ -2,6 +2,9 @@ package io.github.mosser.arduinoml.ens.model;
 
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
+/**
+ * Performs the given type of action on the given variable
+ */
 public class VariableAction extends Action {
 
     private Variable variable;

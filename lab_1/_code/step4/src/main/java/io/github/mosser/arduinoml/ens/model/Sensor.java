@@ -3,7 +3,9 @@ package io.github.mosser.arduinoml.ens.model;
 import io.github.mosser.arduinoml.ens.generator.Visitable;
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
-
+/**
+ * Fires an event when the given sensor returns the SIGNAL stored in value
+ */
 public class Sensor extends Trigger {
 
 
