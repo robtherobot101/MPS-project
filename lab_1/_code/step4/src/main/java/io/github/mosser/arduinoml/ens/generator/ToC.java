@@ -223,6 +223,7 @@ public class ToC extends Visitor<StringBuffer> {
         	transition.getAction().accept(this);
 		}
         c(String.format("    %s_state_machine = &%s;", transition.getName(), transition.getTarget().getName()));
+        c("return;");
         c("  }");
     }
 
