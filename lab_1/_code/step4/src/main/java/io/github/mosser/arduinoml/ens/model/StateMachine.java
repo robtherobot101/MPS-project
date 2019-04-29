@@ -5,12 +5,12 @@ import io.github.mosser.arduinoml.ens.generator.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class App implements NamedElement, Visitable {
+public class StateMachine implements NamedElement, Visitable {
 
 	private String name;
 	private List<Variable> variables = new ArrayList<>();
 	private List<Actuator> actuators = new ArrayList<>();
-	private List<App> machines = new ArrayList<>();
+	private List<StateMachine> machines = new ArrayList<>();
 	private List<State> states = new ArrayList<>();
 	private List<State> initialStates = new ArrayList<>();
 	private List<Event> events = new ArrayList<>();
@@ -94,18 +94,18 @@ public class App implements NamedElement, Visitable {
 		this.events.addAll(events);
 	}
 
-	public List<App> getMachines() {
+	public List<StateMachine> getMachines() {
 		return machines;
 	}
 
-	public void setMachines(List<App> machines) {
+	public void setMachines(List<StateMachine> machines) {
 		this.machines = machines;
 	}
 
 	public void recurse() {
 
 
-        for (App stateMachine : machines) {
+        for (StateMachine stateMachine : machines) {
 
             this.names.add(stateMachine.getName());
             this.actuators.addAll(stateMachine.getActuators());

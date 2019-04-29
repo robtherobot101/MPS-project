@@ -62,8 +62,8 @@
 //        on.setTransitions((Arrays.asList(turnOff)));
 //        off.setTransitions((Arrays.asList(turnOn)));
 //
-//        // Building the App
-//        App theSwitch = new App();
+//        // Building the StateMachine
+//        StateMachine theSwitch = new StateMachine();
 //        theSwitch.setName(stateMachineName);
 //        theSwitch.setBricks(Arrays.asList(led));
 //        theSwitch.setStates(Arrays.asList(on, off));

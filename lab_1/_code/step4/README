@@ -1,0 +1,11 @@
+1. Compile the project with mvn clean package
+
+2. Generate the C source files with mvn -q exec:java
+
+    2a. The generated C code cannot be compiled with make, it includes some builtin Arduino functions
+
+3. The generated sources are in the 'output' directory. Open main.c in the Arduino IDE
+
+    3a. There is an issue with fsm.h. Replacing the '#include fsm.h' in main.c with the contents of fsm.h will get around this
+
+4. Compile and upload to the Arduino

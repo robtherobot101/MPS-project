@@ -293,13 +293,13 @@ public class TheTrinity {
 
 
 
-        // Building the App
+        // Building the StateMachine
 
 
 
         // LED State Machine
 
-        App ledSM = new App();
+        StateMachine ledSM = new StateMachine();
         ledSM.setName(ledStateMachineName);
 
         ledSM.setBricks((Arrays.asList(led)));
@@ -317,7 +317,7 @@ public class TheTrinity {
         //SevenSeg State Machine
 
 
-        App sevenSegSM = new App();
+        StateMachine sevenSegSM = new StateMachine();
         sevenSegSM.setName(sevenSegStateMachineName);
 
         sevenSegSM.setVariables(Arrays.asList(count, sevenSegLastUpdated));
@@ -339,7 +339,7 @@ public class TheTrinity {
 
         // Button State Machine
 
-        App buttonSM = new App();
+        StateMachine buttonSM = new StateMachine();
         buttonSM.setName(buttonStateMachineName);
         buttonSM.setMachines(Arrays.asList(ledSM, sevenSegSM));
 

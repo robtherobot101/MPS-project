@@ -22,7 +22,7 @@ public class ToC extends Visitor<StringBuffer> {
 	}
 
 	@Override
-	public void visit(App app) {
+	public void visit(StateMachine app) {
 
 	    // Libraries to include
 		c("// C code generated from an object model");
@@ -59,8 +59,8 @@ public class ToC extends Visitor<StringBuffer> {
 
         if (!app.getInitialStates().isEmpty()) {
 
-            // App is a Non-Deterministic Finite State Machine with multiple initial states ( think one initial state with lambda transitions )
-            for (App machine: app.getMachines()) {
+            // StateMachine is a Non-Deterministic Finite State Machine with multiple initial states ( think one initial state with lambda transitions )
+            for (StateMachine machine: app.getMachines()) {
                 // Function pointer to store current state
                 h(String.format("void (*%s_state_machine)(int event);", machine.getName()));
                 // Set the pointer to the initial state of the machine

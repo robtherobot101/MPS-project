@@ -126,8 +126,8 @@
 //        things.add(resetTimerAction);
 //        counting.setActions(things);
 //
-//        // Building the App
-//        App theSwitch = new App();
+//        // Building the StateMachine
+//        StateMachine theSwitch = new StateMachine();
 //        theSwitch.setName("sevenseg");
 //        theSwitch.setVariables(Arrays.asList(count, sevenSegLastUpdated));
 //        List<Actuator> allActuators = new ArrayList<>(Arrays.asList(sevenSegActuators));

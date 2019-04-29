@@ -4,7 +4,7 @@ import io.github.mosser.arduinoml.ens.model.*;
 
 public abstract class Visitor<T> {
 
-	public abstract void visit(App app);
+	public abstract void visit(StateMachine stateMachine);
 	public abstract void visit(State state);
 	public abstract void visit(Variable variable);
 	public abstract void visit(VariableGreaterTrigger variableGreaterTrigger);

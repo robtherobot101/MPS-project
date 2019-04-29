@@ -42,8 +42,8 @@
 //////		on.setNext(off);
 //////		off.setNext(on);
 ////
-////		// Building the App
-////		App theSwitch = new App();
+////		// Building the StateMachine
+////		StateMachine theSwitch = new StateMachine();
 ////		theSwitch.setName("Led!");
 ////		theSwitch.setBricks(Arrays.asList(led));
 ////		theSwitch.setStates(Arrays.asList(on, off));
@@ -153,8 +153,8 @@
 //        up.setTransitions(Arrays.asList(release));
 //        down.setTransitions(Arrays.asList(push));
 //
-//        // Building the App
-//        App theSwitch = new App();
+//        // Building the StateMachine
+//        StateMachine theSwitch = new StateMachine();
 //        theSwitch.setName(ledStateMachineName);
 //        theSwitch.setBricks(Arrays.asList(led, button));
 //        theSwitch.setStates(Arrays.asList(off, on, up, down));
