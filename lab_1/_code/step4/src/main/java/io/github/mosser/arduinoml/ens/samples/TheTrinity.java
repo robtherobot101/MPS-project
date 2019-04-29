@@ -286,29 +286,78 @@ public class TheTrinity {
         ledOn.setActions(Arrays.asList(switchTheLightOn));
         ledOff.setActions(Arrays.asList(switchTheLightOff));
 
-        // Building the App
-        App app = new App();
-        app.setName(ledStateMachineName);
-        app.setMachines(Arrays.asList(ledStateMachineName, buttonStateMachineName, sevenSegStateMachineName));
 
-        app.setVariables(Arrays.asList(count, sevenSegLastUpdated));
+
+
+
+        // Building the App
+
+
+
+        // LED State Machine
+
+        App ledSM = new App();
+        ledSM.setName(ledStateMachineName);
+
+        ledSM.setBricks((Arrays.asList(led)));
+
+        ledSM.setEvents(Arrays.asList(null_event));
+        ledSM.setNull_event(null_event);
+
+        ledSM.setStates(Arrays.asList(ledOn, ledOff));
+        ledSM.setInitialStates(Arrays.asList(ledOn));
+
+        ledSM.setInitial(ledOn);
+
+
+
+        //SevenSeg State Machine
+
+
+        App sevenSegSM = new App();
+        sevenSegSM.setName(sevenSegStateMachineName);
+
+        sevenSegSM.setVariables(Arrays.asList(count, sevenSegLastUpdated));
 
         List<Actuator> allActuators = new ArrayList<>(Arrays.asList(sevenSegActuators));
         allActuators.add(seven_seg_prop1);
         allActuators.add(seven_seg_prop2);
-        allActuators.add(led);
-        allActuators.add(button);
-        app.setBricks(allActuators);
+        sevenSegSM.setBricks(allActuators);
 
-        app.setEvents(Arrays.asList(null_event, buttonPressed, buttonReleased, sevenSegOverflow));
-        app.setNull_event(null_event);
+        sevenSegSM.setEvents(Arrays.asList(sevenSegOverflow));
+        sevenSegSM.setNull_event(null_event);
 
-        app.setStates(Arrays.asList(ledOn, ledOff, buttonDown, buttonUp, sevenSegInitialise, sevenSegCounting, sevenSegReset));
-        app.setInitialStates(Arrays.asList(ledOn, buttonUp, sevenSegInitialise));
+        sevenSegSM.setStates(Arrays.asList(sevenSegInitialise, sevenSegCounting, sevenSegReset));
+        sevenSegSM.setInitialStates(Arrays.asList(sevenSegInitialise));
+
+
+        sevenSegSM.setInitial(sevenSegInitialise);
+
+
+        // Button State Machine
+
+        App buttonSM = new App();
+        buttonSM.setName(buttonStateMachineName);
+        buttonSM.setMachines(Arrays.asList(ledSM, sevenSegSM));
+
+
+        buttonSM.setBricks(Arrays.asList(button));
+
+        buttonSM.setEvents(Arrays.asList(buttonPressed, buttonReleased));
+        buttonSM.setNull_event(null_event);
+
+        buttonSM.setStates(Arrays.asList(buttonDown, buttonUp));
+        buttonSM.setInitialStates(Arrays.asList(buttonUp));
+
+        buttonSM.setInitial(buttonUp);
+
+
 
         // Generating Code
         Visitor codeGenerator = new ToC();
-        app.accept(codeGenerator);
+        buttonSM.accept(codeGenerator);
+
+
 
         // Writing C files
         try {

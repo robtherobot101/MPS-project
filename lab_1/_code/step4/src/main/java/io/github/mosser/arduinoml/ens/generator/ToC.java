@@ -31,6 +31,8 @@ public class ToC extends Visitor<StringBuffer> {
 		c("#include <fsm.h>");
 		c("");
 
+		app.recurse();
+
         for(Actuator a: app.getActuators()){
             c(String.format("int %s = %d;", a.getName(), a.getPin()));
         }
@@ -52,14 +54,22 @@ public class ToC extends Visitor<StringBuffer> {
         if (!app.getInitialStates().isEmpty()) {
 
             // App is a Non-Deterministic Finite State Machine with multiple initial states ( think one initial state with lambda transitions )
-            for (String machine: app.getMachines()) {
-                h(String.format("void (*%s_state_machine)(int event);", machine));
+            for (App machine: app.getMachines()) {
+                h(String.format("void (*%s_state_machine)(int event);", machine.getName()));
+                c(String.format("  %s_state_machine = &%s;", machine.getName(), machine.getInitial().getName()));
             }
+            h(String.format("void (*%s_state_machine)(int event);", app.getName()));
+            c(String.format("  %s_state_machine = &%s;", app.getName(), app.getInitial().getName()));
+
+//            for (int i = 0; i < app.getNames().size(); i++) {
+//                c(String.format("  %s_state_machine = &%s;", app.getNames().get(i), app.getInitialStates().get(i).getName()));
+//            }
+//            c(String.format("  %s_state_machine = &%s;", app.getName(), app.getInitialStates().get(app.getInitialStates().size() - 1).getName()));
 
             //TODO: Remove hard coded state machines once I figure out how to name them properly
-            c(String.format("  led_state_machine = &led_state_on;"));
-            c(String.format("  button_state_machine = &button_state_up;"));
-            c(String.format("  sevenseg_state_machine = &sevenseg_state_initialising;"));
+
+//            c(String.format("  button_state_machine = &button_state_up;"));
+//            c(String.format("  sevenseg_state_machine = &sevenseg_state_initialising;"));
 
         }
 
@@ -71,9 +81,13 @@ public class ToC extends Visitor<StringBuffer> {
         c("void do_event(int event)");
         c("{");
         //TODO: Remove hard coded state machines once I figure out how to name them properly
-        c(String.format("  led_state_machine(event);"));
-        c(String.format("  button_state_machine(event);"));
-        c(String.format("  sevenseg_state_machine(event);"));
+        for (String stateMachine: app.getNames()) {
+            c(String.format("  %s_state_machine(event);", stateMachine));
+        }
+        c(String.format("  %s_state_machine(event);", app.getName()));
+//        c(String.format("  led_state_machine(event);"));
+//        c(String.format("  button_state_machine(event);"));
+//        c(String.format("  sevenseg_state_machine(event);"));
         c("}\n");
 
 		for(State state: app.getStates()){

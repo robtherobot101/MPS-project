@@ -10,10 +10,11 @@ public class App implements NamedElement, Visitable {
 	private String name;
 	private List<Variable> variables = new ArrayList<>();
 	private List<Actuator> actuators = new ArrayList<>();
-	private List<String> machines = new ArrayList<>();
+	private List<App> machines = new ArrayList<>();
 	private List<State> states = new ArrayList<>();
 	private List<State> initialStates = new ArrayList<>();
 	private List<Event> events = new ArrayList<>();
+	private List<String> names = new ArrayList<>();
 	private Event null_event;
 	private State initial;
 
@@ -27,7 +28,15 @@ public class App implements NamedElement, Visitable {
 		this.name = name;
 	}
 
-	public List<Variable> getVariables() {
+    public List<String> getNames() {
+        return names;
+    }
+
+    public void setNames(List<String> names) {
+	    this.names = names;
+    }
+
+    public List<Variable> getVariables() {
 		return variables;
 	}
 
@@ -40,15 +49,16 @@ public class App implements NamedElement, Visitable {
 	}
 
 	public void setBricks(List<Actuator> actuators) {
-		this.actuators = actuators;
+		this.actuators.addAll(actuators);
 	}
+
 
 	public List<State> getStates() {
 		return states;
 	}
 
 	public void setStates(List<State> states) {
-		this.states = states;
+		this.states.addAll(states);
 	}
 
 	public State getInitial() {
@@ -61,7 +71,7 @@ public class App implements NamedElement, Visitable {
 
 	public List<State> getInitialStates() { return initialStates; }
 
-	public void setInitialStates(List<State> initialStates) { this.initialStates = initialStates; }
+	public void setInitialStates(List<State> initialStates) { this.initialStates.addAll(initialStates); }
 
 	@Override
 	public void accept(Visitor visitor) {
@@ -81,14 +91,33 @@ public class App implements NamedElement, Visitable {
 	}
 
 	public void setEvents(List<Event> events) {
-		this.events = events;
+		this.events.addAll(events);
 	}
 
-	public List<String> getMachines() {
+	public List<App> getMachines() {
 		return machines;
 	}
 
-	public void setMachines(List<String> machines) {
+	public void setMachines(List<App> machines) {
 		this.machines = machines;
 	}
+
+	public void recurse() {
+
+
+        for (App stateMachine : machines) {
+
+            this.names.add(stateMachine.getName());
+            this.actuators.addAll(stateMachine.getActuators());
+            this.events.addAll(stateMachine.getEvents());
+            this.variables.addAll(stateMachine.getVariables());
+            this.initialStates.addAll(stateMachine.getInitialStates());
+            this.states.addAll(stateMachine.getStates());
+            stateMachine.recurse();
+
+        }
+
+    }
+
+
 }
