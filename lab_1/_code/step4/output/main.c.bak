@@ -1,13 +1,11 @@
 // C code generated from an object model
-// Application name: sevenseg
+// Application name: led
 
 #include <avr/io.h>
 #include <util/delay.h>
 #include <Arduino.h>
 #include <fsm.h>
 
-int count = 0;
-unsigned long seven_seg_last_updated = 0;
 int pin_1 = 1;
 int pin_2 = 2;
 int pin_3 = 3;
@@ -17,6 +15,8 @@ int pin_6 = 6;
 int pin_7 = 7;
 int SEVENSEG_PROP1 = 8;
 int SEVENSEG_PROP2 = 9;
+int led = 12;
+int button = 10;
 void setup(){
   pinMode(pin_1, OUTPUT); // pin_1 [Actuator]
   pinMode(pin_2, OUTPUT); // pin_2 [Actuator]
@@ -27,266 +27,310 @@ void setup(){
   pinMode(pin_7, OUTPUT); // pin_7 [Actuator]
   pinMode(SEVENSEG_PROP1, OUTPUT); // SEVENSEG_PROP1 [Actuator]
   pinMode(SEVENSEG_PROP2, OUTPUT); // SEVENSEG_PROP2 [Actuator]
+  pinMode(led, OUTPUT); // led [Actuator]
+  pinMode(button, INPUT); // button [Actuator]
+  led_state_machine = &led_state_on;
+  button_state_machine = &button_state_up;
   sevenseg_state_machine = &sevenseg_state_initialising;
 }
 
-void do_event(int eventTrigger)
+void do_event(int event)
 {
-  sevenseg_state_machine(eventTrigger);
+  led_state_machine(event);
+  button_state_machine(event);
+  sevenseg_state_machine(event);
 }
 
-void sevenseg_state_initialising(int eventTrigger) {
+void led_state_on(int event) {
+  digitalWrite(led,HIGH);
+  if(event == BUTTON_PRESSED_EVENT) {
+    led_state_machine = &led_state_off;
+  }
+}
+void led_state_off(int event) {
+  digitalWrite(led,LOW);
+  if(event == BUTTON_PRESSED_EVENT) {
+    led_state_machine = &led_state_on;
+  }
+}
+void button_state_down(int event) {
+  if(event == BUTTON_RELEASED_EVENT) {
+    button_state_machine = &button_state_up;
+  }
+  if (digitalRead(button)) {
+do_event(BUTTON_RELEASED_EVENT);
+  }
+}
+void button_state_up(int event) {
+  if(event == BUTTON_PRESSED_EVENT) {
+    button_state_machine = &button_state_down;
+  }
+  if (!digitalRead(button)) {
+do_event(BUTTON_PRESSED_EVENT);
+  }
+}
+void sevenseg_state_initialising(int event) {
   digitalWrite(SEVENSEG_PROP1,LOW);
   digitalWrite(SEVENSEG_PROP2,HIGH);
-  if(eventTrigger == NULL_EVENT) {
+  if(event == NULL_EVENT) {
     sevenseg_state_machine = &sevenseg_state_counting;
   }
 }
-void sevenseg_state_counting(int eventTrigger) {
-switch(count) { 
+void sevenseg_state_counting(int event) {
+  static int count = 0;
+  static unsigned long seven_seg_last_updated = 0;
+  switch(count) { 
 
-case 0: 
+    case 0: 
   digitalWrite(pin_1,HIGH);
-break;
-case 1: 
+    break;
+    case 1: 
   digitalWrite(pin_1,LOW);
-break;
-case 2: 
+    break;
+    case 2: 
   digitalWrite(pin_1,HIGH);
-break;
-case 3: 
+    break;
+    case 3: 
   digitalWrite(pin_1,HIGH);
-break;
-case 4: 
+    break;
+    case 4: 
   digitalWrite(pin_1,LOW);
-break;
-case 5: 
+    break;
+    case 5: 
   digitalWrite(pin_1,HIGH);
-break;
-case 6: 
+    break;
+    case 6: 
   digitalWrite(pin_1,HIGH);
-break;
-case 7: 
+    break;
+    case 7: 
   digitalWrite(pin_1,HIGH);
-break;
-case 8: 
+    break;
+    case 8: 
   digitalWrite(pin_1,HIGH);
-break;
-case 9: 
+    break;
+    case 9: 
   digitalWrite(pin_1,HIGH);
-break;
-}
-switch(count) { 
+    break;
+  }
+  switch(count) { 
 
-case 0: 
+    case 0: 
   digitalWrite(pin_2,HIGH);
-break;
-case 1: 
+    break;
+    case 1: 
   digitalWrite(pin_2,HIGH);
-break;
-case 2: 
+    break;
+    case 2: 
   digitalWrite(pin_2,HIGH);
-break;
-case 3: 
+    break;
+    case 3: 
   digitalWrite(pin_2,HIGH);
-break;
-case 4: 
+    break;
+    case 4: 
   digitalWrite(pin_2,HIGH);
-break;
-case 5: 
+    break;
+    case 5: 
   digitalWrite(pin_2,LOW);
-break;
-case 6: 
+    break;
+    case 6: 
   digitalWrite(pin_2,LOW);
-break;
-case 7: 
+    break;
+    case 7: 
   digitalWrite(pin_2,HIGH);
-break;
-case 8: 
+    break;
+    case 8: 
   digitalWrite(pin_2,HIGH);
-break;
-case 9: 
+    break;
+    case 9: 
   digitalWrite(pin_2,HIGH);
-break;
-}
-switch(count) { 
+    break;
+  }
+  switch(count) { 
 
-case 0: 
+    case 0: 
   digitalWrite(pin_3,HIGH);
-break;
-case 1: 
+    break;
+    case 1: 
   digitalWrite(pin_3,HIGH);
-break;
-case 2: 
+    break;
+    case 2: 
   digitalWrite(pin_3,LOW);
-break;
-case 3: 
+    break;
+    case 3: 
   digitalWrite(pin_3,HIGH);
-break;
-case 4: 
+    break;
+    case 4: 
   digitalWrite(pin_3,HIGH);
-break;
-case 5: 
+    break;
+    case 5: 
   digitalWrite(pin_3,HIGH);
-break;
-case 6: 
+    break;
+    case 6: 
   digitalWrite(pin_3,HIGH);
-break;
-case 7: 
+    break;
+    case 7: 
   digitalWrite(pin_3,HIGH);
-break;
-case 8: 
+    break;
+    case 8: 
   digitalWrite(pin_3,HIGH);
-break;
-case 9: 
+    break;
+    case 9: 
   digitalWrite(pin_3,HIGH);
-break;
-}
-switch(count) { 
+    break;
+  }
+  switch(count) { 
 
-case 0: 
+    case 0: 
   digitalWrite(pin_4,HIGH);
-break;
-case 1: 
+    break;
+    case 1: 
   digitalWrite(pin_4,LOW);
-break;
-case 2: 
+    break;
+    case 2: 
   digitalWrite(pin_4,HIGH);
-break;
-case 3: 
+    break;
+    case 3: 
   digitalWrite(pin_4,HIGH);
-break;
-case 4: 
+    break;
+    case 4: 
   digitalWrite(pin_4,LOW);
-break;
-case 5: 
+    break;
+    case 5: 
   digitalWrite(pin_4,HIGH);
-break;
-case 6: 
+    break;
+    case 6: 
   digitalWrite(pin_4,HIGH);
-break;
-case 7: 
+    break;
+    case 7: 
   digitalWrite(pin_4,LOW);
-break;
-case 8: 
+    break;
+    case 8: 
   digitalWrite(pin_4,HIGH);
-break;
-case 9: 
-  digitalWrite(pin_4,LOW);
-break;
-}
-switch(count) { 
+    break;
+    case 9: 
+  digitalWrite(pin_4,HIGH);
+    break;
+  }
+  switch(count) { 
 
-case 0: 
+    case 0: 
   digitalWrite(pin_5,HIGH);
-break;
-case 1: 
+    break;
+    case 1: 
   digitalWrite(pin_5,LOW);
-break;
-case 2: 
+    break;
+    case 2: 
   digitalWrite(pin_5,HIGH);
-break;
-case 3: 
+    break;
+    case 3: 
   digitalWrite(pin_5,LOW);
-break;
-case 4: 
+    break;
+    case 4: 
   digitalWrite(pin_5,LOW);
-break;
-case 5: 
+    break;
+    case 5: 
   digitalWrite(pin_5,LOW);
-break;
-case 6: 
+    break;
+    case 6: 
   digitalWrite(pin_5,HIGH);
-break;
-case 7: 
+    break;
+    case 7: 
   digitalWrite(pin_5,LOW);
-break;
-case 8: 
+    break;
+    case 8: 
   digitalWrite(pin_5,HIGH);
-break;
-case 9: 
-  digitalWrite(pin_5,HIGH);
-break;
-}
-switch(count) { 
+    break;
+    case 9: 
+  digitalWrite(pin_5,LOW);
+    break;
+  }
+  switch(count) { 
 
-case 0: 
+    case 0: 
   digitalWrite(pin_6,HIGH);
-break;
-case 1: 
+    break;
+    case 1: 
   digitalWrite(pin_6,LOW);
-break;
-case 2: 
+    break;
+    case 2: 
   digitalWrite(pin_6,LOW);
-break;
-case 3: 
+    break;
+    case 3: 
   digitalWrite(pin_6,LOW);
-break;
-case 4: 
+    break;
+    case 4: 
   digitalWrite(pin_6,HIGH);
-break;
-case 5: 
+    break;
+    case 5: 
   digitalWrite(pin_6,HIGH);
-break;
-case 6: 
+    break;
+    case 6: 
   digitalWrite(pin_6,HIGH);
-break;
-case 7: 
+    break;
+    case 7: 
   digitalWrite(pin_6,LOW);
-break;
-case 8: 
+    break;
+    case 8: 
   digitalWrite(pin_6,HIGH);
-break;
-case 9: 
+    break;
+    case 9: 
   digitalWrite(pin_6,HIGH);
-break;
-}
-switch(count) { 
+    break;
+  }
+  switch(count) { 
 
-case 0: 
+    case 0: 
   digitalWrite(pin_7,LOW);
-break;
-case 1: 
+    break;
+    case 1: 
   digitalWrite(pin_7,LOW);
-break;
-case 2: 
+    break;
+    case 2: 
   digitalWrite(pin_7,HIGH);
-break;
-case 3: 
+    break;
+    case 3: 
   digitalWrite(pin_7,HIGH);
-break;
-case 4: 
+    break;
+    case 4: 
   digitalWrite(pin_7,HIGH);
-break;
-case 5: 
+    break;
+    case 5: 
   digitalWrite(pin_7,HIGH);
-break;
-case 6: 
+    break;
+    case 6: 
   digitalWrite(pin_7,HIGH);
-break;
-case 7: 
+    break;
+    case 7: 
   digitalWrite(pin_7,LOW);
-break;
-case 8: 
+    break;
+    case 8: 
   digitalWrite(pin_7,HIGH);
-break;
-case 9: 
+    break;
+    case 9: 
   digitalWrite(pin_7,HIGH);
-break;
-}
+    break;
+  }
 if (millis() - seven_seg_last_updated > 1000UL) {
 seven_seg_last_updated = millis();
-  digitalWrite(pin_1,HIGH);
+count++;
+}
+  if(event == SEVENSEG_RESET_EVENT) {
+count = 0;
+    sevenseg_state_machine = &sevenseg_state_reset;
+  }
+  if(event == BUTTON_PRESSED_EVENT) {
+count = 0;
+    sevenseg_state_machine = &sevenseg_state_reset;
+  }
+if(count > 9) {
+do_event(SEVENSEG_RESET_EVENT);
 }
 }
-void loop(void) {
- while(1) {
-    do_event(NULL_EVENT);
+void sevenseg_state_reset(int event) {
+  if(event == NULL_EVENT) {
+    sevenseg_state_machine = &sevenseg_state_counting;
   }
 }
-
-int main(void) {
-  setup();
-  loop();
-  return 0;
+void loop(void) {
+  do_event(NULL_EVENT);
 }

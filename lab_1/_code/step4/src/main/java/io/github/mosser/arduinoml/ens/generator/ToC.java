@@ -187,7 +187,7 @@ public class ToC extends Visitor<StringBuffer> {
 		c(String.format("if (millis() - %s > %dUL) {", delayedAction.getTimer().getName(), delayedAction.getDelay()));
 		c(String.format("%s = millis();", delayedAction.getTimer().getName()));
 		// Execute the action
-		visit(delayedAction.getAction());
+		delayedAction.getAction().accept(this);
 		c("}");
 	}
 
