@@ -36,7 +36,7 @@
   </registry>
   <node concept="3RykN_" id="1VAgMjDs1ls">
     <property role="TrG5h" value="led" />
-    <node concept="2ssGbE" id="2sjtTYVpb0o" role="2ssG86">
+    <node concept="2ssGbE" id="2sjtTYVqiQY" role="2ssG86">
       <property role="TrG5h" value="theButton" />
       <property role="2ssG8o" value="12" />
     </node>

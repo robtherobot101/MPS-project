@@ -87,9 +87,7 @@
           </node>
         </node>
       </node>
-      <node concept="3F0ifn" id="2sjtTYVow$P" role="3EZMnx">
-        <property role="3F0ifm" value="empty" />
-      </node>
+      <node concept="35HoNQ" id="2sjtTYVq2Ef" role="3EZMnx" />
       <node concept="3EZMnI" id="2sjtTYVowyJ" role="3EZMnx">
         <node concept="VPM3Z" id="2sjtTYVowyL" role="3F10Kt" />
         <node concept="3XFhqQ" id="2sjtTYVowzh" role="3EZMnx" />

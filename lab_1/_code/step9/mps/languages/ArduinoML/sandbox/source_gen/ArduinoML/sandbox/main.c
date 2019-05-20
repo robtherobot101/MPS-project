@@ -1,4 +1,4 @@
-#include <avr.io.h>
+#include <avr/io.h>
 #include <util/delay.h>
 #include <Arduino.h>
 
@@ -10,6 +10,9 @@ void state_off2();
 
 // Declaring available actuators 
 int theLed2 = 13;
+
+// Declaring available sensors 
+
 
 // Declaring states
 void state_on2()
@@ -30,9 +33,10 @@ void state_off2()
 void setup()
 {
   pinMode(theLed2, OUTPUT);
+
 }
 
-void main()
+int main(void)
 {
   setup();
   state_on2();
