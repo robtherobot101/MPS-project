@@ -56,7 +56,7 @@ Board upload : cd output && make upload && cd ..;
 
 ```
 azrael:step4 mosser$ cd output && make upload && cd ..;
-avr-gcc -c -mmcu=atmega328p -Wall -I. -I/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/cores/arduino -I/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/variants/standard -DF_CPU=16000000 -Os  main.c -o main.o
+avr-gcc -c -mmcu=atmega328p -Wall -I. -I/Applications/Arduino.stateMachine/Contents/Java/hardware/arduino/avr/cores/arduino -I/Applications/Arduino.stateMachine/Contents/Java/hardware/arduino/avr/variants/standard -DF_CPU=16000000 -Os  main.c -o main.o
 ...
 avrdude done.  Thank you.
 ```
