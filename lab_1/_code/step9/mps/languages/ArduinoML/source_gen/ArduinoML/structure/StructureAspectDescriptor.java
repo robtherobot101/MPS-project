@@ -4,39 +4,53 @@ package ArduinoML.structure;
 
 import jetbrains.mps.smodel.runtime.BaseStructureAspectDescriptor;
 import jetbrains.mps.smodel.runtime.ConceptDescriptor;
+import jetbrains.mps.smodel.runtime.EnumerationDescriptor;
 import java.util.Collection;
 import java.util.Arrays;
 import org.jetbrains.annotations.Nullable;
 import jetbrains.mps.smodel.adapter.ids.SConceptId;
+import jetbrains.mps.smodel.runtime.DataTypeDescriptor;
 import org.jetbrains.mps.openapi.language.SAbstractConcept;
 import jetbrains.mps.smodel.runtime.impl.ConceptDescriptorBuilder2;
+import jetbrains.mps.smodel.adapter.ids.MetaIdFactory;
+import jetbrains.mps.smodel.adapter.ids.PrimitiveTypeId;
 
 public class StructureAspectDescriptor extends BaseStructureAspectDescriptor {
   /*package*/ final ConceptDescriptor myConceptAction = createDescriptorForAction();
   /*package*/ final ConceptDescriptor myConceptActuator = createDescriptorForActuator();
   /*package*/ final ConceptDescriptor myConceptApp = createDescriptorForApp();
+  /*package*/ final ConceptDescriptor myConceptSensor = createDescriptorForSensor();
   /*package*/ final ConceptDescriptor myConceptState = createDescriptorForState();
-  private final LanguageConceptSwitch myConceptIndex;
+  /*package*/ final EnumerationDescriptor myEnumerationSIGNAL = new EnumerationDescriptor_SIGNAL();
+  private final LanguageConceptSwitch myIndexSwitch;
 
   public StructureAspectDescriptor() {
-    myConceptIndex = new LanguageConceptSwitch();
+    myIndexSwitch = new LanguageConceptSwitch();
+  }
+
+
+  @Override
+  public void reportDependencies(jetbrains.mps.smodel.runtime.StructureAspectDescriptor.Dependencies deps) {
+    deps.extendedLanguage(0xceab519525ea4f22L, 0x9b92103b95ca8c0cL, "jetbrains.mps.lang.core");
   }
 
   @Override
   public Collection<ConceptDescriptor> getDescriptors() {
-    return Arrays.asList(myConceptAction, myConceptActuator, myConceptApp, myConceptState);
+    return Arrays.asList(myConceptAction, myConceptActuator, myConceptApp, myConceptSensor, myConceptState);
   }
 
   @Override
   @Nullable
   public ConceptDescriptor getDescriptor(SConceptId id) {
-    switch (myConceptIndex.index(id)) {
+    switch (myIndexSwitch.index(id)) {
       case LanguageConceptSwitch.Action:
         return myConceptAction;
       case LanguageConceptSwitch.Actuator:
         return myConceptActuator;
       case LanguageConceptSwitch.App:
         return myConceptApp;
+      case LanguageConceptSwitch.Sensor:
+        return myConceptSensor;
       case LanguageConceptSwitch.State:
         return myConceptState;
       default:
@@ -44,15 +58,21 @@ public class StructureAspectDescriptor extends BaseStructureAspectDescriptor {
     }
   }
 
+  @Override
+  public Collection<DataTypeDescriptor> getDataTypeDescriptors() {
+    return Arrays.asList(myEnumerationSIGNAL);
+  }
+
   /*package*/ int internalIndex(SAbstractConcept c) {
-    return myConceptIndex.index(c);
+    return myIndexSwitch.index(c);
   }
 
   private static ConceptDescriptor createDescriptorForAction() {
     ConceptDescriptorBuilder2 b = new ConceptDescriptorBuilder2("ArduinoML", "Action", 0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc7L);
     b.class_(false, false, false);
     b.origin("r:95dc3936-047b-4df0-883d-ba757a2402dd(ArduinoML.structure)/2226540891595542471");
-    b.prop("signal", 0x1ee64324e96f0fe0L, "2226540891595542496");
+    b.version(2);
+    b.property("signal", 0x1ee64324e96f0fe0L).type(MetaIdFactory.dataTypeId(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc8L)).origin("2226540891595542496").done();
     b.associate("target", 0x1ee64324e96f0fe2L).target(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fcdL).optional(false).origin("2226540891595542498").done();
     return b.create();
   }
@@ -61,7 +81,8 @@ public class StructureAspectDescriptor extends BaseStructureAspectDescriptor {
     b.class_(false, false, false);
     b.parent(0xceab519525ea4f22L, 0x9b92103b95ca8c0cL, 0x110396eaaa4L);
     b.origin("r:95dc3936-047b-4df0-883d-ba757a2402dd(ArduinoML.structure)/2226540891595542477");
-    b.prop("pin", 0x1ee64324e96f0fd0L, "2226540891595542480");
+    b.version(2);
+    b.property("pin", 0x1ee64324e96f0fd0L).type(PrimitiveTypeId.INTEGER).origin("2226540891595542480").done();
     return b.create();
   }
   private static ConceptDescriptor createDescriptorForApp() {
@@ -70,8 +91,19 @@ public class StructureAspectDescriptor extends BaseStructureAspectDescriptor {
     b.parent(0xceab519525ea4f22L, 0x9b92103b95ca8c0cL, 0x110396eaaa4L);
     b.parent(0xceab519525ea4f22L, 0x9b92103b95ca8c0cL, 0x33d23ee961a0cbf3L);
     b.origin("r:95dc3936-047b-4df0-883d-ba757a2402dd(ArduinoML.structure)/2226540891595542465");
+    b.version(2);
     b.aggregate("states", 0x1ee64324e96f0fd2L).target(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc4L).optional(false).ordered(true).multiple(true).origin("2226540891595542482").done();
     b.aggregate("actuators", 0x1ee64324e96f0fd4L).target(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fcdL).optional(false).ordered(true).multiple(true).origin("2226540891595542484").done();
+    b.aggregate("sensors", 0x2713779fbb61b599L).target(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x2713779fbb61b575L).optional(true).ordered(true).multiple(true).origin("2815725719963940249").done();
+    return b.create();
+  }
+  private static ConceptDescriptor createDescriptorForSensor() {
+    ConceptDescriptorBuilder2 b = new ConceptDescriptorBuilder2("ArduinoML", "Sensor", 0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x2713779fbb61b575L);
+    b.class_(false, false, false);
+    b.parent(0xceab519525ea4f22L, 0x9b92103b95ca8c0cL, 0x110396eaaa4L);
+    b.origin("r:95dc3936-047b-4df0-883d-ba757a2402dd(ArduinoML.structure)/2815725719963940213");
+    b.version(2);
+    b.property("pin", 0x2713779fbb61b587L).type(PrimitiveTypeId.INTEGER).origin("2815725719963940231").done();
     return b.create();
   }
   private static ConceptDescriptor createDescriptorForState() {
@@ -79,7 +111,8 @@ public class StructureAspectDescriptor extends BaseStructureAspectDescriptor {
     b.class_(false, false, false);
     b.parent(0xceab519525ea4f22L, 0x9b92103b95ca8c0cL, 0x110396eaaa4L);
     b.origin("r:95dc3936-047b-4df0-883d-ba757a2402dd(ArduinoML.structure)/2226540891595542468");
-    b.prop("isInitial", 0x1ee64324e970156aL, "2226540891595609450");
+    b.version(2);
+    b.property("isInitial", 0x1ee64324e970156aL).type(PrimitiveTypeId.BOOLEAN).origin("2226540891595609450").done();
     b.associate("next", 0x1ee64324e96f0fddL).target(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc4L).optional(false).origin("2226540891595542493").done();
     b.aggregate("actions", 0x1ee64324e96f0fd9L).target(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc7L).optional(false).ordered(true).multiple(true).origin("2226540891595542489").done();
     return b.create();

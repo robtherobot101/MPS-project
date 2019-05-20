@@ -16,7 +16,7 @@ public class Action_TextGen extends TextGenDescriptorBase {
     tgs.append("digitalWrite(");
     tgs.append(SPropertyOperations.getString(SLinkOperations.getTarget(ctx.getPrimaryInput(), MetaAdapterFactory.getReferenceLink(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc7L, 0x1ee64324e96f0fe2L, "target")), MetaAdapterFactory.getProperty(0xceab519525ea4f22L, 0x9b92103b95ca8c0cL, 0x110396eaaa4L, 0x110396ec041L, "name")));
     tgs.append(", ");
-    tgs.append(SPropertyOperations.getString_def(ctx.getPrimaryInput(), MetaAdapterFactory.getProperty(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc7L, 0x1ee64324e96f0fe0L, "signal"), "HIGH"));
+    tgs.append(SPropertyOperations.getString(ctx.getPrimaryInput(), MetaAdapterFactory.getProperty(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc7L, 0x1ee64324e96f0fe0L, "signal")));
     tgs.append(");");
   }
 }

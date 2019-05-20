@@ -11,6 +11,7 @@ import jetbrains.mps.internal.collections.runtime.ListSequence;
 import jetbrains.mps.lang.smodel.generator.smodelAdapter.SLinkOperations;
 import jetbrains.mps.smodel.adapter.structure.MetaAdapterFactory;
 import jetbrains.mps.internal.collections.runtime.IWhereFilter;
+import java.util.Objects;
 import jetbrains.mps.lang.smodel.generator.smodelAdapter.SPropertyOperations;
 import jetbrains.mps.errors.messageTargets.MessageTarget;
 import jetbrains.mps.errors.messageTargets.NodeMessageTarget;
@@ -23,7 +24,7 @@ public class unique_initial_state_NonTypesystemRule extends AbstractNonTypesyste
   public void applyRule(final SNode app, final TypeCheckingContext typeCheckingContext, IsApplicableStatus status) {
     if (ListSequence.fromList(SLinkOperations.getChildren(app, MetaAdapterFactory.getContainmentLink(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc1L, 0x1ee64324e96f0fd2L, "states"))).where(new IWhereFilter<SNode>() {
       public boolean accept(SNode s) {
-        return eq_qpdiil_a0a0a0a0a0a0a0b(SPropertyOperations.getBoolean(s, MetaAdapterFactory.getProperty(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc4L, 0x1ee64324e970156aL, "isInitial")), true);
+        return Objects.equals(SPropertyOperations.getBoolean(s, MetaAdapterFactory.getProperty(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc4L, 0x1ee64324e970156aL, "isInitial")), true);
       }
     }).count() > 1) {
       {
@@ -40,8 +41,5 @@ public class unique_initial_state_NonTypesystemRule extends AbstractNonTypesyste
   }
   public boolean overrides() {
     return false;
-  }
-  private static boolean eq_qpdiil_a0a0a0a0a0a0a0b(Object a, Object b) {
-    return (a != null ? a.equals(b) : a == b);
   }
 }

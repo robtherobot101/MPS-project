@@ -1,3 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dependencies version="2" modelHash="7wb1irxnhy7so86yz510b0cnj9tiuxm" />
+<product version="3" modelHash="-509b0kvh2u5dhsq7pacoo9yl0i81azs">
+  <files names="Action_Constraints.java:Actuator_Constraints.java:App_Constraints.java:ConstraintsAspectDescriptor.java:Sensor_Constraints.java:State_Constraints.java" />
+</product>
 

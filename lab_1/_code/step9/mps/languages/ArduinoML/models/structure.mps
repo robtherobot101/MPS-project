@@ -2,7 +2,7 @@
 <model ref="r:95dc3936-047b-4df0-883d-ba757a2402dd(ArduinoML.structure)">
   <persistence version="9" />
   <languages>
-    <use id="c72da2b9-7cce-4447-8389-f407dc1158b7" name="jetbrains.mps.lang.structure" version="5" />
+    <use id="c72da2b9-7cce-4447-8389-f407dc1158b7" name="jetbrains.mps.lang.structure" version="7" />
     <devkit ref="78434eb8-b0e5-444b-850d-e7c4ad2da9ab(jetbrains.mps.devkit.aspect.structure)" />
   </languages>
   <imports>
@@ -68,6 +68,13 @@
       <property role="20kJfa" value="actuators" />
       <property role="20lbJX" value="1..n" />
       <ref role="20lvS9" node="1VAgMjDrKZd" resolve="Actuator" />
+    </node>
+    <node concept="1TJgyj" id="2sjtTYVormp" role="1TKVEi">
+      <property role="IQ2ns" value="2815725719963940249" />
+      <property role="20lmBu" value="aggregation" />
+      <property role="20kJfa" value="sensors" />
+      <property role="20lbJX" value="0..n" />
+      <ref role="20lvS9" node="2sjtTYVorlP" resolve="Sensor" />
     </node>
     <node concept="PrWs8" id="1VAgMjDrKZ2" role="PzmwI">
       <ref role="PrY4T" to="tpck:h0TrEE$" resolve="INamedConcept" />
@@ -142,6 +149,19 @@
     </node>
     <node concept="1TJgyi" id="1VAgMjDrKZg" role="1TKVEl">
       <property role="IQ2nx" value="2226540891595542480" />
+      <property role="TrG5h" value="pin" />
+      <ref role="AX2Wp" to="tpck:fKAQMTA" resolve="integer" />
+    </node>
+  </node>
+  <node concept="1TIwiD" id="2sjtTYVorlP">
+    <property role="EcuMT" value="2815725719963940213" />
+    <property role="TrG5h" value="Sensor" />
+    <ref role="1TJDcQ" to="tpck:gw2VY9q" resolve="BaseConcept" />
+    <node concept="PrWs8" id="2sjtTYVorlZ" role="PzmwI">
+      <ref role="PrY4T" to="tpck:h0TrEE$" resolve="INamedConcept" />
+    </node>
+    <node concept="1TJgyi" id="2sjtTYVorm7" role="1TKVEl">
+      <property role="IQ2nx" value="2815725719963940231" />
       <property role="TrG5h" value="pin" />
       <ref role="AX2Wp" to="tpck:fKAQMTA" resolve="integer" />
     </node>

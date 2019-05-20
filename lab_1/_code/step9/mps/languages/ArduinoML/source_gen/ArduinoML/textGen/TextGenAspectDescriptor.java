@@ -11,9 +11,6 @@ import org.jetbrains.mps.openapi.language.SAbstractConcept;
 import jetbrains.mps.text.rt.TextGenModelOutline;
 import org.jetbrains.mps.openapi.model.SNode;
 import jetbrains.mps.smodel.adapter.structure.MetaAdapterFactory;
-import jetbrains.mps.text.TextUnit;
-import jetbrains.mps.text.impl.BufferLayoutBuilder;
-import jetbrains.mps.text.impl.RegularTextUnit;
 
 public class TextGenAspectDescriptor extends TextGenAspectBase {
   private final LanguageConceptSwitch myIndex = new LanguageConceptSwitch();
@@ -31,6 +28,8 @@ public class TextGenAspectDescriptor extends TextGenAspectBase {
         return new Actuator_TextGen();
       case LanguageConceptSwitch.App:
         return new App_TextGen();
+      case LanguageConceptSwitch.Sensor:
+        return new Sensor_TextGen();
       case LanguageConceptSwitch.State:
         return new State_TextGen();
     }
@@ -43,7 +42,7 @@ public class TextGenAspectDescriptor extends TextGenAspectBase {
       if (root.getConcept().equals(MetaAdapterFactory.getConcept(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc1L, "ArduinoML.structure.App"))) {
         String fname = getFileName_App(root);
         String ext = getFileExtension_App(root);
-        outline.registerTextUnit(createTextUnit0((ext == null ? fname : (fname + '.' + ext)), root));
+        outline.registerTextUnit((ext == null ? fname : (fname + '.' + ext)), root);
         continue;
       }
     }
@@ -53,14 +52,5 @@ public class TextGenAspectDescriptor extends TextGenAspectBase {
   }
   private static String getFileExtension_App(SNode node) {
     return "c";
-  }
-  private static TextUnit createTextUnit0(String filename, SNode node) {
-    BufferLayoutBuilder lb = new BufferLayoutBuilder();
-    lb.add("HEADER");
-    lb.add("BODY");
-    lb.activate("BODY");
-    RegularTextUnit rv = new RegularTextUnit(node, filename, null);
-    rv.setBufferLayout(lb.create());
-    return rv;
   }
 }

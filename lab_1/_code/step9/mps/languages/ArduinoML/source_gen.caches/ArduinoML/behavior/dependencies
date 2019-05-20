@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dependenciesRoot>
-  <dependency className="ArduinoML.behavior.App__BehaviorDescriptor" file="App__BehaviorDescriptor.java">
+  <dependency className="ArduinoML.behavior.App__BehaviorDescriptor">
     <classNode dependClassName="java.lang.Class" />
     <classNode dependClassName="java.lang.Object" />
     <classNode dependClassName="java.lang.Override" />
@@ -26,7 +26,7 @@
     <classNode dependClassName="org.jetbrains.mps.openapi.model.SNode" />
     <classNode extendsClassName="jetbrains.mps.core.aspects.behaviour.BaseBHDescriptor" />
   </dependency>
-  <dependency className="ArduinoML.behavior.BehaviorAspectDescriptor" file="BehaviorAspectDescriptor.java">
+  <dependency className="ArduinoML.behavior.BehaviorAspectDescriptor">
     <classNode dependClassName="ArduinoML.behavior.App__BehaviorDescriptor" />
     <classNode dependClassName="jetbrains.mps.core.aspects.behaviour.api.BHDescriptor" />
     <classNode dependClassName="jetbrains.mps.lang.smodel.ConceptSwitchIndex" />

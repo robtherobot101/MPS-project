@@ -55,6 +55,20 @@ public class App_TextGen extends TextGenDescriptorBase {
     }
     tgs.newLine();
     tgs.newLine();
+    tgs.append("// Declaring available sensors ");
+    tgs.newLine();
+    {
+      Iterable<SNode> collection = SLinkOperations.getChildren(ctx.getPrimaryInput(), MetaAdapterFactory.getContainmentLink(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc1L, 0x2713779fbb61b599L, "sensors"));
+      final SNode lastItem = Sequence.fromIterable(collection).last();
+      for (SNode item : collection) {
+        tgs.appendNode(item);
+        if (item != lastItem) {
+          tgs.append(" \n");
+        }
+      }
+    }
+    tgs.newLine();
+    tgs.newLine();
     tgs.append("// Declaring states");
     tgs.newLine();
     {
@@ -81,6 +95,17 @@ public class App_TextGen extends TextGenDescriptorBase {
         tgs.append(SPropertyOperations.getString(it, MetaAdapterFactory.getProperty(0xceab519525ea4f22L, 0x9b92103b95ca8c0cL, 0x110396eaaa4L, 0x110396ec041L, "name")));
         tgs.append(", ");
         tgs.append("OUTPUT);");
+        tgs.newLine();
+      }
+    });
+    tgs.newLine();
+    ListSequence.fromList(SLinkOperations.getChildren(ctx.getPrimaryInput(), MetaAdapterFactory.getContainmentLink(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc1L, 0x2713779fbb61b599L, "sensors"))).visitAll(new IVisitor<SNode>() {
+      public void visit(SNode it) {
+        tgs.indent();
+        tgs.append("pinMode(} ");
+        tgs.append(SPropertyOperations.getString(it, MetaAdapterFactory.getProperty(0xceab519525ea4f22L, 0x9b92103b95ca8c0cL, 0x110396eaaa4L, 0x110396ec041L, "name")));
+        tgs.append(", ");
+        tgs.append("INPUT);");
         tgs.newLine();
       }
     });

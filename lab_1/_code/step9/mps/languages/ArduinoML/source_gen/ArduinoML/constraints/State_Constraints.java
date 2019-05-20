@@ -15,6 +15,7 @@ import jetbrains.mps.internal.collections.runtime.ListSequence;
 import jetbrains.mps.lang.smodel.generator.smodelAdapter.SLinkOperations;
 import jetbrains.mps.lang.smodel.generator.smodelAdapter.SNodeOperations;
 import jetbrains.mps.internal.collections.runtime.IWhereFilter;
+import java.util.Objects;
 import jetbrains.mps.lang.smodel.generator.smodelAdapter.SPropertyOperations;
 import org.jetbrains.mps.openapi.language.SReferenceLink;
 import jetbrains.mps.smodel.runtime.ReferenceConstraintsDescriptor;
@@ -47,7 +48,7 @@ public class State_Constraints extends BaseConstraintsDescriptor {
         String propertyName = "name";
         return ListSequence.fromList(SLinkOperations.getChildren(SNodeOperations.cast(SNodeOperations.getParent(node), MetaAdapterFactory.getConcept(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc1L, "ArduinoML.structure.App")), MetaAdapterFactory.getContainmentLink(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc1L, 0x1ee64324e96f0fd2L, "states"))).where(new IWhereFilter<SNode>() {
           public boolean accept(SNode it) {
-            return eq_ptaftw_a0a0a0a0a0a0b0b0a1a0b0c(SPropertyOperations.getString(it, MetaAdapterFactory.getProperty(0xceab519525ea4f22L, 0x9b92103b95ca8c0cL, 0x110396eaaa4L, 0x110396ec041L, "name")), (SPropertyOperations.getString(propertyValue)));
+            return Objects.equals(SPropertyOperations.getString(it, MetaAdapterFactory.getProperty(0xceab519525ea4f22L, 0x9b92103b95ca8c0cL, 0x110396eaaa4L, 0x110396ec041L, "name")), (SPropertyOperations.getString(propertyValue)));
           }
         }).count() <= 1;
       }
@@ -72,10 +73,8 @@ public class State_Constraints extends BaseConstraintsDescriptor {
           }
           @Override
           public Scope createScope(final IOperationContext operationContext, final ReferenceConstraintsContext _context) {
-            {
-              Scope scope = Scope.getScope(_context.getContextNode(), _context.getContainmentLink(), _context.getPosition(), MetaAdapterFactory.getConcept(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc4L, "ArduinoML.structure.State"));
-              return (scope == null ? new EmptyScope() : scope);
-            }
+            Scope scope = Scope.getScope(_context.getContextNode(), _context.getContainmentLink(), _context.getPosition(), MetaAdapterFactory.getConcept(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc4L, "ArduinoML.structure.State"));
+            return (scope == null ? new EmptyScope() : scope);
           }
         };
       }
@@ -83,7 +82,4 @@ public class State_Constraints extends BaseConstraintsDescriptor {
     return references;
   }
   private static SNodePointer breakingNode_ptaftw_a0a0a0a0a1a0b0a1a3 = new SNodePointer("r:34842474-2b6b-4ec3-86bc-44e75c23a1b0(ArduinoML.constraints)", "2226540891596010633");
-  private static boolean eq_ptaftw_a0a0a0a0a0a0b0b0a1a0b0c(Object a, Object b) {
-    return (a != null ? a.equals(b) : a == b);
-  }
 }

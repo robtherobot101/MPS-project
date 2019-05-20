@@ -19,13 +19,13 @@ public final class BehaviorAspectDescriptor extends BaseBehaviorAspectDescriptor
 
   @Nullable
   public BHDescriptor getDescriptor(@NotNull SAbstractConcept concept) {
-    SAbstractConcept cncpt_a0e = concept;
-    switch (index_846f5o_a0e.index(cncpt_a0e)) {
+    SAbstractConcept cncpt = concept;
+    switch (conceptIndex.index(cncpt)) {
       case 0:
         return myApp__BehaviorDescriptor;
       default:
     }
     return null;
   }
-  private static final ConceptSwitchIndex index_846f5o_a0e = new ConceptSwitchIndexBuilder().put(MetaIdFactory.conceptId(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc1L)).seal();
+  private static final ConceptSwitchIndex conceptIndex = new ConceptSwitchIndexBuilder().put(MetaIdFactory.conceptId(0x6d84bad7eb044249L, 0x8d80c9157947c3f2L, 0x1ee64324e96f0fc1L)).seal();
 }

@@ -2,7 +2,7 @@
 <model ref="r:a48f37bc-8627-459f-8f77-fc98db464b7c(ArduinoML.editor)">
   <persistence version="9" />
   <languages>
-    <use id="18bc6592-03a6-4e29-a83a-7ff23bde13ba" name="jetbrains.mps.lang.editor" version="11" />
+    <use id="18bc6592-03a6-4e29-a83a-7ff23bde13ba" name="jetbrains.mps.lang.editor" version="12" />
     <devkit ref="2677cb18-f558-4e33-bc38-a5139cee06dc(jetbrains.mps.devkit.language-design)" />
   </languages>
   <imports>
@@ -84,6 +84,22 @@
           </node>
           <node concept="3F0ifn" id="1VAgMjDs802" role="2czzBI">
             <property role="3F0ifm" value="no actuators defined" />
+          </node>
+        </node>
+      </node>
+      <node concept="3F0ifn" id="2sjtTYVow$P" role="3EZMnx">
+        <property role="3F0ifm" value="empty" />
+      </node>
+      <node concept="3EZMnI" id="2sjtTYVowyJ" role="3EZMnx">
+        <node concept="VPM3Z" id="2sjtTYVowyL" role="3F10Kt" />
+        <node concept="3XFhqQ" id="2sjtTYVowzh" role="3EZMnx" />
+        <node concept="l2Vlx" id="2sjtTYVowyO" role="2iSdaV" />
+        <node concept="3F2HdR" id="2sjtTYVow$f" role="3EZMnx">
+          <ref role="1NtTu8" to="bt66:2sjtTYVormp" resolve="sensors" />
+          <node concept="2iRkQZ" id="2sjtTYVow$i" role="2czzBx" />
+          <node concept="VPM3Z" id="2sjtTYVow$j" role="3F10Kt" />
+          <node concept="3F0ifn" id="2sjtTYVow$q" role="2czzBI">
+            <property role="3F0ifm" value="no sensors defined" />
           </node>
         </node>
       </node>
@@ -214,6 +230,28 @@
         <ref role="1NtTu8" to="bt66:1VAgMjDrKZw" resolve="signal" />
       </node>
       <node concept="2iRfu4" id="1VAgMjDsd3G" role="2iSdaV" />
+    </node>
+  </node>
+  <node concept="24kQdi" id="2sjtTYVormT">
+    <ref role="1XX52x" to="bt66:2sjtTYVorlP" resolve="Sensor" />
+    <node concept="3EZMnI" id="2sjtTYVorn9" role="2wV5jI">
+      <node concept="2iRfu4" id="2sjtTYVornc" role="2iSdaV" />
+      <node concept="3EZMnI" id="2sjtTYVoroc" role="3EZMnx">
+        <node concept="l2Vlx" id="2sjtTYVorod" role="2iSdaV" />
+        <node concept="VPM3Z" id="2sjtTYVoroe" role="3F10Kt" />
+        <node concept="3F0ifn" id="2sjtTYVoroi" role="3EZMnx">
+          <property role="3F0ifm" value="sensor:" />
+        </node>
+        <node concept="3F0A7n" id="2sjtTYVoron" role="3EZMnx">
+          <ref role="1NtTu8" to="tpck:h0TrG11" resolve="name" />
+        </node>
+        <node concept="3F0ifn" id="2sjtTYVorov" role="3EZMnx">
+          <property role="3F0ifm" value="on pin" />
+        </node>
+        <node concept="3F0A7n" id="2sjtTYVoroD" role="3EZMnx">
+          <ref role="1NtTu8" to="bt66:2sjtTYVorm7" resolve="pin" />
+        </node>
+      </node>
     </node>
   </node>
 </model>

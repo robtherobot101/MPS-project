@@ -12,6 +12,9 @@
       </concept>
     </language>
     <language id="6d84bad7-eb04-4249-8d80-c9157947c3f2" name="ArduinoML">
+      <concept id="2815725719963940213" name="ArduinoML.structure.Sensor" flags="ng" index="2ssGbE">
+        <property id="2815725719963940231" name="pin" index="2ssG8o" />
+      </concept>
       <concept id="2226540891595542468" name="ArduinoML.structure.State" flags="ng" index="3RykNw">
         <property id="2226540891595609450" name="isInitial" index="3R__pe" />
         <reference id="2226540891595542493" name="next" index="3RykNT" />
@@ -22,6 +25,7 @@
         <reference id="2226540891595542498" name="target" index="3RykN6" />
       </concept>
       <concept id="2226540891595542465" name="ArduinoML.structure.App" flags="ng" index="3RykN_">
+        <child id="2815725719963940249" name="sensors" index="2ssG86" />
         <child id="2226540891595542484" name="actuators" index="3RykNK" />
         <child id="2226540891595542482" name="states" index="3RykNQ" />
       </concept>
@@ -32,6 +36,10 @@
   </registry>
   <node concept="3RykN_" id="1VAgMjDs1ls">
     <property role="TrG5h" value="led" />
+    <node concept="2ssGbE" id="2sjtTYVpb0o" role="2ssG86">
+      <property role="TrG5h" value="theButton" />
+      <property role="2ssG8o" value="12" />
+    </node>
     <node concept="3RykNw" id="1VAgMjDs1lt" role="3RykNQ">
       <property role="TrG5h" value="on" />
       <property role="3R__pe" value="true" />

@@ -1,3 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dependencies version="2" modelHash="e95hqzzsrfhs73497bdjwz4q6f7st6j" />
+<product version="3" modelHash="-1xwegid6qconld3ojfx1spgxcg5qb14">
+  <files names="Action_TextGen.java:Actuator_TextGen.java:App_TextGen.java:Sensor_TextGen.java:State_TextGen.java:TextGenAspectDescriptor.java" />
+</product>
 
